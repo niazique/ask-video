@@ -635,15 +635,16 @@ const I18N_PREFIXES = {
   }
 };
 
+// Alphabetical by name.
 const I18N_LANGS = [
-  { code: 'en', name: 'English' },
-  { code: 'ru', name: 'Русский' },
   { code: 'de', name: 'Deutsch' },
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Español' },
   { code: 'fr', name: 'Français' },
   { code: 'it', name: 'Italiano' },
-  { code: 'es', name: 'Español' },
-  { code: 'zh', name: '中文' },
   { code: 'pt', name: 'Português' },
+  { code: 'ru', name: 'Русский' },
+  { code: 'zh', name: '中文' },
 ];
 
 let LANG = 'en';

@@ -6,7 +6,7 @@ A Chrome extension that lets you ask Claude anything about the YouTube video you
 - **Choose how long the answer is:** *tl;dr* (one sentence), *normal* (a few short paragraphs) or *lecture* (a structured answer with headings).
 - **Choose the model:** Auto, Opus, Sonnet or Haiku.
 - **Copy subtitles as a file.** The `.SRT` button (or right-click on a YouTube page → *Copy subtitles file*) puts an `.srt` file on the clipboard, in the original language or in English. Paste it into a chat with Claude, a folder, anywhere.
-- **Interface in 8 languages:** English, Русский, Deutsch, Français, Italiano, Español, 中文, Português.
+- **Interface in 8 languages:** Deutsch, English, Español, Français, Italiano, Português, Русский, 中文.
 
 Answers come from **Claude Code running on your Mac**, so they use your Claude subscription. No API key is needed.
 

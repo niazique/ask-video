@@ -216,7 +216,7 @@ function render() {
 
 function autosize() {
   const ta = $('input');
-  ta.style.height = '32px';
+  ta.style.height = '30px';
   ta.style.height = Math.min(ta.scrollHeight, 96) + 'px';
 }
 

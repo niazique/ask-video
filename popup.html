@@ -79,11 +79,11 @@
   .chip:hover:not(:disabled) { background: #f1f1f1; }
   .field { display: flex; align-items: flex-end; gap: 6px; padding: 5px 5px 5px 12px; border: 1px solid #d6d6d6; border-radius: var(--r); }
   .field:focus-within { border-color: #b8b8b8; }
-  #input { flex: 1; min-width: 0; max-height: 96px; border: 0; outline: none; resize: none; background: transparent; font: inherit; padding: 6px 0; height: 32px; }
+  #input { flex: 1; min-width: 0; max-height: 96px; border: 0; outline: none; resize: none; background: transparent; font: inherit; padding: 5px 0; height: 30px; } /* same height as Ask, so the button sits 5px from every edge */
   #input::placeholder { color: #9a9a9a; }
   #ask { height: 30px; padding: 0 14px; flex: none; border: 0; border-radius: 9px; background: #000; color: #fff; font-weight: 400; cursor: pointer; }
   button:disabled { opacity: .35; cursor: default; }
-  .under { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+  .under { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
   .menu.up { top: auto; bottom: calc(100% + 6px); }
   /* Answer length: segmented control */
   .seg { display: inline-flex; gap: 2px; padding: 3px; background: #f1f1f1; border-radius: 10px; }
