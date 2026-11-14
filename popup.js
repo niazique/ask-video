@@ -161,29 +161,9 @@ function setupPanel() {
 }
 
 async function checkClaude() {
-  if (SIM) { claude = { state: SIM, detail: 'Simulated error (triple-click the logo to change)' }; return render(); }
   claude = await chrome.runtime.sendMessage({ type: 'claudeStatus' }).catch((e) => ({ state: 'error', detail: e.message }));
   render();
 }
-
-// ---------- Simulation (for testing the setup screens) ----------
-// Triple-click the logo to cycle: real status → not signed in → Claude Code missing →
-// helper missing → error → real status. A red label in the header shows it is on.
-const SIM_STATES = ['', 'signed-out', 'no-claude', 'no-helper', 'error'];
-let SIM = '';
-
-function renderSim() {
-  $('sim').hidden = !SIM;
-  $('sim').textContent = SIM ? `sim: ${SIM}` : '';
-}
-
-document.querySelector('.logo').addEventListener('click', (e) => {
-  if (e.detail !== 3) return;
-  SIM = SIM_STATES[(SIM_STATES.indexOf(SIM) + 1) % SIM_STATES.length];
-  chrome.storage.local.set({ simulate: SIM });
-  renderSim();
-  if (info) checkClaude();
-});
 
 $('body').addEventListener('click', async (e) => {
   const b = e.target.closest('.cmd');
@@ -451,9 +431,7 @@ async function init() {
 }
 
 loadLang().then(async () => {
-  const saved = await chrome.storage.local.get(['model', 'verbosity', 'simulate']);
-  SIM = SIM_STATES.includes(saved.simulate) ? saved.simulate : '';
-  renderSim();
+  const saved = await chrome.storage.local.get(['model', 'verbosity']);
   MODEL = saved.model || '';
   VERB = Number.isInteger(saved.verbosity) ? clamp(saved.verbosity, 0, VERB_LEVELS.length - 1) : VERB_DEFAULT;
   if (LEGACY_MODELS[MODEL]) {

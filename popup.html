@@ -12,8 +12,6 @@
   .hd { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px 14px; }
   .logo { width: 24px; height: 24px; flex: none; }
   .name { font-weight: 600; font-size: 14px; }
-  .logo { cursor: default; user-select: none; -webkit-user-select: none; }
-  .sim { padding: 2px 6px; border-radius: 6px; background: #E5332A; color: #fff; font: 10px ui-monospace, Menlo, monospace; }
   .icon-btn { width: 30px; height: 30px; flex: none; border: 0; border-radius: 9px; background: transparent; display: grid; place-items: center; cursor: pointer; }
   .icon-btn:hover, .icon-btn.open { background: #f1f1f1; }
   .icon-btn:disabled { opacity: .3; cursor: default; background: transparent; }
@@ -99,7 +97,6 @@
   <div class="hd">
     <img class="logo" src="icons/icon128.png" alt="">
     <span class="name">ASK Video</span>
-    <span id="sim" class="sim" hidden></span>
     <span class="spacer"></span>
     <div class="dl-wrap">
       <button id="lang" class="text-btn" data-i18n-title="Language"></button>

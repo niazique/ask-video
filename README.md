@@ -97,7 +97,6 @@ Then remove ASK Video in `chrome://extensions` and delete the folder.
 - Each question sends the whole transcript to Claude, so long videos use more of your Claude limits — Opus the most.
 - Subtitles are read the same way the YouTube player loads them. If YouTube changes how that works, copying and answers may break until the extension is updated.
 - Chats are kept per video until Chrome restarts.
-- To preview the setup screens without breaking your setup, triple-click the ASK logo in the popup: it cycles through "not signed in", "Claude Code missing", "helper missing" and "error". A red `sim:` label shows while it is on; keep clicking to return to the real status.
 
 ## License
 
