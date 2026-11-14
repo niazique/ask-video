@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root { color-scheme: light; --r: 12px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { width: 460px; height: 520px; background: #fff; color: #000; font: 13px/1.45 -apple-system, system-ui, sans-serif; display: flex; flex-direction: column; }
+  button { font: inherit; color: inherit; }
+
+  .hd { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px 14px; }
+  .logo { width: 24px; height: 24px; flex: none; }
+  .name { font-weight: 600; font-size: 14px; }
+  .logo { cursor: default; user-select: none; -webkit-user-select: none; }
+  .sim { padding: 2px 6px; border-radius: 6px; background: #E5332A; color: #fff; font: 10px ui-monospace, Menlo, monospace; }
+  .icon-btn { width: 30px; height: 30px; flex: none; border: 0; border-radius: 9px; background: transparent; display: grid; place-items: center; cursor: pointer; }
+  .icon-btn:hover, .icon-btn.open { background: #f1f1f1; }
+  .icon-btn:disabled { opacity: .3; cursor: default; background: transparent; }
+  .icon-btn svg { width: 18px; height: 18px; display: block; }
+  .spacer { margin-left: auto; }
+  .dl-wrap { position: relative; }
+  .text-btn { height: 30px; min-width: 36px; padding: 0 9px; border: 0; border-radius: 9px; background: #f1f1f1; font-size: 12px; font-weight: 400; cursor: pointer; white-space: nowrap; }
+  .text-btn:hover, .text-btn.open { background: #e4e4e4; }
+  #modelMenu { width: 140px; }
+  .menu .item .check { opacity: 0; }
+  .menu .item.on .check { opacity: 1; }
+  #langMenu { width: 140px; }
+
+  /* Setup instructions when Claude Code is not ready */
+  .setup { margin: auto 0; padding: 4px 4px 8px; }
+  .setup h3 { margin: 0 0 4px; font-size: 16px; letter-spacing: -.01em; }
+  .setup > p { margin: 0 0 12px; color: #666; }
+  .setup ol { margin: 0 0 14px; padding-left: 20px; }
+  .setup li { margin: 0 0 10px; }
+  .setup .cmd { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; margin-top: 6px; padding: 8px 10px; border: 0; border-radius: 10px; background: #f1f1f1; font: 12px ui-monospace, Menlo, monospace; text-align: left; cursor: pointer; }
+  .setup .cmd:hover { background: #e6e6e6; }
+  .setup .cmd small { font: 11px -apple-system, system-ui, sans-serif; opacity: .5; white-space: nowrap; }
+  .setup .recheck { padding: 8px 14px; border: 0; border-radius: 10px; background: #000; color: #fff; font-weight: 400; cursor: pointer; }
+  .setup .detail { margin: 10px 0 0; font-size: 11px; color: #999; overflow-wrap: anywhere; }
+  #dl { display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px 0 8px; border: 0; border-radius: 9px; background: #f1f1f1; font-size: 12px; font-weight: 400; cursor: pointer; white-space: nowrap; }
+  #dl:hover, #dl.open { background: #e4e4e4; }
+  #dl:disabled { opacity: .35; cursor: default; background: #f1f1f1; }
+  #dl svg { width: 16px; height: 16px; display: block; }
+
+  .menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 10; width: 210px; padding: 4px; background: #fff; border-radius: var(--r); box-shadow: 0 8px 28px rgba(0,0,0,.2); }
+  .menu .mh { padding: 6px 10px 4px; font-size: 11px; opacity: .5; }
+  .menu .item { display: flex; justify-content: space-between; gap: 8px; width: 100%; padding: 8px 10px; border: 0; border-radius: 9px; background: none; text-align: left; cursor: pointer; }
+  .menu .item:hover:not(:disabled) { background: #f1f1f1; }
+  .menu .item:disabled { opacity: .35; cursor: default; }
+  .menu .item small { opacity: .45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .menu .mf { margin: 4px 0 0; padding: 7px 10px 5px; border-top: 1px solid #eee; font-size: 11px; opacity: .5; }
+
+  .toast { position: absolute; left: 50%; top: 52px; transform: translateX(-50%); z-index: 20; width: max-content; max-width: 320px; padding: 7px 12px; border-radius: 10px; background: #000; color: #fff; font-size: 12px; text-align: center; }
+
+  #body { position: relative; flex: 1; min-height: 0; overflow-y: auto; padding: 4px 14px 8px; display: flex; flex-direction: column; gap: 10px; }
+  .empty { margin: auto; max-width: 230px; text-align: center; color: #999; }
+  .empty svg { display: block; width: 32px; height: 32px; margin: 0 auto 8px; color: #cfcfcf; }
+  .q { align-self: flex-end; max-width: 82%; padding: 8px 11px; background: #f1f1f1; border-radius: var(--r); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .a { overflow-wrap: anywhere; }
+  .a p { margin: 0 0 6px; }
+  .a p:last-child { margin-bottom: 0; }
+  .a h4 { margin: 12px 0 4px; font-size: 14px; font-weight: 600; }
+  .a h4:first-child { margin-top: 0; }
+  .a ul, .a ol { margin: 0 0 6px; padding-left: 18px; }
+  .a li { margin: 3px 0; }
+  .a code { font: 12px ui-monospace, Menlo, monospace; background: #f1f1f1; padding: 0 4px; border-radius: 4px; }
+  .ts { font: 11px ui-monospace, Menlo, monospace; padding: 1px 5px; border: 0; border-radius: 6px; background: #f1f1f1; white-space: nowrap; cursor: pointer; }
+  .ts:hover { background: #000; color: #fff; }
+  .err { padding: 8px 11px; border: 1px solid #000; border-radius: var(--r); font-size: 12px; }
+  .thinking { color: #999; }
+  .thinking::after { content: ""; animation: dots 1.2s steps(4) infinite; }
+  @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+
+  .foot { padding: 8px 12px 12px; }
+  .first { margin: auto; text-align: center; }
+  .first .tv-scene { display: block; width: 240px; max-width: 100%; height: auto; margin: 0 auto; overflow: visible; cursor: pointer; }
+  .first .idle-scene { display: block; width: 150px; height: auto; margin: 0 auto; overflow: visible; }
+  .first p { margin: 4px auto 0; max-width: 280px; color: #999; }
+  .chip { display: block; margin: 12px auto 0; padding: 6px 12px; border: 1px solid #d6d6d6; border-radius: 10px; background: #fff; color: #000; font-size: 12px; cursor: pointer; }
+  .chip:hover:not(:disabled) { background: #f1f1f1; }
+  .field { display: flex; align-items: flex-end; gap: 6px; padding: 5px 5px 5px 12px; border: 1px solid #d6d6d6; border-radius: var(--r); }
+  .field:focus-within { border-color: #b8b8b8; }
+  #input { flex: 1; min-width: 0; max-height: 96px; border: 0; outline: none; resize: none; background: transparent; font: inherit; padding: 6px 0; height: 32px; }
+  #input::placeholder { color: #9a9a9a; }
+  #ask { height: 30px; padding: 0 14px; flex: none; border: 0; border-radius: 9px; background: #000; color: #fff; font-weight: 400; cursor: pointer; }
+  button:disabled { opacity: .35; cursor: default; }
+  .under { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+  .menu.up { top: auto; bottom: calc(100% + 6px); }
+  /* Answer length: segmented control */
+  .seg { display: inline-flex; gap: 2px; padding: 3px; background: #f1f1f1; border-radius: 10px; }
+  .seg button { padding: 4px 9px; border: 0; border-radius: 7px; background: transparent; font-size: 12px; cursor: pointer; white-space: nowrap; color: #555; }
+  .seg button:hover { color: #000; }
+  .seg button.on { background: #fff; color: #000; box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+  <div class="hd">
+    <img class="logo" src="icons/icon128.png" alt="">
+    <span class="name">ASK Video</span>
+    <span id="sim" class="sim" hidden></span>
+    <span class="spacer"></span>
+    <div class="dl-wrap">
+      <button id="lang" class="text-btn" data-i18n-title="Language"></button>
+      <div class="menu" id="langMenu" hidden>
+        <div id="langItems"></div>
+      </div>
+    </div>
+    <div class="dl-wrap">
+      <button id="dl" data-i18n-title="Copy the subtitles as an .srt file" disabled><span id="dlIcon"></span><span>.SRT</span></button>
+      <div class="menu" id="menu" hidden>
+        <div class="mh" data-i18n="Copy .srt file"></div>
+        <button class="item" data-kind="native"><span data-i18n="Original"></span> <small id="nativeName"></small></button>
+        <button class="item" data-kind="en"><span data-i18n="English"></span> <small id="enName"></small></button>
+        <div class="mf" data-i18n="Also in the right-click menu on YouTube"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="body"></div>
+
+  <div class="foot">
+    <div class="field">
+      <textarea id="input" rows="1" data-i18n-placeholder="Ask anything about this video…"></textarea>
+      <button id="ask">Ask</button>
+    </div>
+    <div class="under">
+      <div id="verb" class="seg" role="group" data-i18n-title="How detailed the answer is"></div>
+      <div class="dl-wrap">
+        <button id="model" class="text-btn" data-i18n-title="Model"></button>
+        <div class="menu up" id="modelMenu" hidden>
+          <div id="modelItems"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="scene.js"></script>
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
