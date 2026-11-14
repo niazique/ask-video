@@ -20,6 +20,8 @@ Answers come from **Claude Code running on your Mac**, so they use your Claude s
 
 Without Claude Code the extension can still copy subtitles, but cannot answer questions.
 
+**Windows and Linux:** the extension installs and copies subtitles (as text), but answers are macOS-only for now — the helper that talks to Claude Code has not been ported yet. The popup detects your system and says so.
+
 ## Install
 
 1. Get the code:
@@ -54,8 +56,8 @@ Chrome does not let programs add unpacked extensions on their own, so step 3 (th
 When a user asks you to install this extension:
 
 1. Clone the repository to `~/ask-video` (or a folder the user names). If it already exists, run `git pull` there instead.
-2. Run `./native/install.sh` from that folder. It must print `Done.`; if it says Claude Code was not found, tell the user to install Claude Code first.
-3. Run `claude auth status`. If `loggedIn` is not `true`, ask the user to run `claude auth login` and sign in with their Claude account.
+2. On macOS, run `./native/install.sh` from that folder. It must print `Done.`; if it says Claude Code was not found, tell the user to install Claude Code first. On Windows or Linux, skip this step (the helper is macOS-only) and tell the user that copying subtitles works but answers do not yet.
+3. On macOS, run `claude auth status`. If `loggedIn` is not `true`, ask the user to run `claude auth login` and sign in with their Claude account.
 4. Tell the user to open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose the folder from step 1 — and, if it was already loaded, to press the reload button on the ASK Video card instead.
 5. Tell them to open a YouTube video and click the ASK Video icon.
 

@@ -50,8 +50,9 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (file.ok) return send(tab.id, { type: 'toast', text: t('File copied: {0}', res.filename) });
 
   const text = await send(tab.id, { type: 'copyText', text: res.srt });
+  const mac = (await chrome.runtime.getPlatformInfo().catch(() => ({ os: 'mac' }))).os === 'mac';
   send(tab.id, text?.ok
-    ? { type: 'toast', text: t('Copied as text ({0}): the file helper is not installed', t(res.label)) }
+    ? { type: 'toast', text: mac ? t('Copied as text ({0}): the file helper is not installed', t(res.label)) : t('Subtitles copied as text ({0})', t(res.label)) }
     : { type: 'toast', text: t('Could not copy subtitles'), isError: true });
 });
 

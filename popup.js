@@ -138,10 +138,24 @@ const SETUP = {
   },
 };
 
+// The helper (and so the answers) works only on macOS for now, so other systems get
+// their own screen: what does not work yet, and what still does.
+const OS_NAMES = { win: 'Windows', linux: 'Linux', cros: 'ChromeOS', openbsd: 'OpenBSD', fuchsia: 'Fuchsia' };
+let OS = 'mac'; // from chrome.runtime.getPlatformInfo(): mac | win | linux | cros | …
+const SETUP_NOT_MAC = {
+  title: 'Answers are not available on {0} yet',
+  lead: 'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.',
+  steps: [
+    ['You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.'],
+    ['Paste them into Claude (claude.ai or the Claude app) and ask your question there.'],
+  ],
+};
+
 function setupPanel() {
-  const s = SETUP[claude.state] || SETUP.error;
+  const mac = OS === 'mac';
+  const s = mac ? SETUP[claude.state] || SETUP.error : SETUP_NOT_MAC;
   const box = el('div', 'setup');
-  box.append(el('h3', null, t(s.title)), el('p', null, t(s.lead)));
+  box.append(el('h3', null, t(s.title, OS_NAMES[OS] || OS)), el('p', null, t(s.lead)));
   const ol = el('ol');
   for (const [text, cmd] of s.steps) {
     const li = el('li', null, t(text));
@@ -153,9 +167,11 @@ function setupPanel() {
     }
     ol.append(li);
   }
+  box.append(ol);
+  if (!mac) return box;
   const again = el('button', 'recheck', t('Check again'));
   again.addEventListener('click', () => { again.disabled = true; again.textContent = t('Checking…'); checkClaude(); });
-  box.append(ol, again);
+  box.append(again);
   if (claude.state === 'error' && claude.detail) box.append(el('p', 'detail', claude.detail));
   return box;
 }
@@ -374,7 +390,7 @@ $('menu').addEventListener('click', async (e) => {
     const file = await chrome.runtime.sendMessage({ type: 'copyAsFile', filename: res.filename, content: res.srt });
     if (!file?.ok) {
       await navigator.clipboard.writeText(res.srt);
-      toast('Copied as text: the file-copy helper is not installed');
+      toast(OS === 'mac' ? 'Copied as text: the file-copy helper is not installed' : 'Subtitles copied as text');
     }
     $('dlIcon').innerHTML = ICON_OK;
     setTimeout(() => { $('dlIcon').innerHTML = ICON_DL; }, 1500);
@@ -431,6 +447,7 @@ async function init() {
 }
 
 loadLang().then(async () => {
+  try { OS = (await chrome.runtime.getPlatformInfo()).os; } catch {}
   const saved = await chrome.storage.local.get(['model', 'verbosity']);
   MODEL = saved.model || '';
   VERB = Number.isInteger(saved.verbosity) ? clamp(saved.verbosity, 0, VERB_LEVELS.length - 1) : VERB_DEFAULT;

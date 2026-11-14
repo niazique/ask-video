@@ -60,6 +60,14 @@ const I18N = {
     'Check again': 'Проверить снова',
     'Checking…': 'Проверяю…',
 
+    // Windows and Linux: no helper yet
+    'Answers are not available on {0} yet': 'На {0} ответы пока недоступны',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video отвечает через Claude Code с помощью небольшой программы-помощника, а она пока работает только на macOS.',
+    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Субтитры всё равно можно скопировать: нажмите .SRT вверху или кликните правой кнопкой на странице YouTube.',
+    'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Вставьте их в Claude (claude.ai или приложение Claude) и задайте вопрос там.',
+    'Subtitles copied as text': 'Субтитры скопированы текстом',
+    'Subtitles copied as text ({0})': 'Субтитры скопированы текстом ({0})',
+
     // Context menu and on-page notifications
     'Copy subtitles file': 'Скопировать файл с субтитрами',
     'Original language': 'Язык оригинала',
@@ -147,6 +155,14 @@ const I18N = {
     'Copied': 'Kopiert',
     'Check again': 'Erneut prüfen',
     'Checking…': 'Prüfe…',
+
+    // Windows and Linux: no helper yet
+    'Answers are not available on {0} yet': 'Antworten sind unter {0} noch nicht verfügbar',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video antwortet über Claude Code mit einem kleinen Hilfsprogramm, das vorerst nur unter macOS läuft.',
+    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Untertitel kannst du trotzdem kopieren: Klicke oben auf .SRT oder mach einen Rechtsklick auf der YouTube-Seite.',
+    'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Füge sie in Claude ein (claude.ai oder die Claude-App) und stell deine Frage dort.',
+    'Subtitles copied as text': 'Untertitel als Text kopiert',
+    'Subtitles copied as text ({0})': 'Untertitel als Text kopiert ({0})',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Untertiteldatei kopieren',
@@ -236,6 +252,14 @@ const I18N = {
     'Check again': 'Vérifier à nouveau',
     'Checking…': 'Vérification…',
 
+    // Windows and Linux: no helper yet
+    'Answers are not available on {0} yet': 'Les réponses ne sont pas encore disponibles sous {0}',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video répond via Claude Code grâce à un petit assistant qui ne fonctionne pour l’instant que sur macOS.',
+    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Vous pouvez quand même copier les sous-titres : cliquez sur .SRT en haut ou faites un clic droit sur la page YouTube.',
+    'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Collez-les dans Claude (claude.ai ou l’app Claude) et posez votre question là-bas.',
+    'Subtitles copied as text': 'Sous-titres copiés en texte',
+    'Subtitles copied as text ({0})': 'Sous-titres copiés en texte ({0})',
+
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copier le fichier de sous-titres',
     'Original language': 'Langue d’origine',
@@ -323,6 +347,14 @@ const I18N = {
     'Copied': 'Copiato',
     'Check again': 'Controlla di nuovo',
     'Checking…': 'Controllo…',
+
+    // Windows and Linux: no helper yet
+    'Answers are not available on {0} yet': 'Le risposte non sono ancora disponibili su {0}',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video risponde tramite Claude Code con un piccolo programma di supporto, che per ora funziona solo su macOS.',
+    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Puoi comunque copiare i sottotitoli: clicca .SRT in alto o fai clic destro sulla pagina di YouTube.',
+    'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Incollali in Claude (claude.ai o l’app Claude) e fai lì la tua domanda.',
+    'Subtitles copied as text': 'Sottotitoli copiati come testo',
+    'Subtitles copied as text ({0})': 'Sottotitoli copiati come testo ({0})',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copia il file dei sottotitoli',
@@ -412,6 +444,14 @@ const I18N = {
     'Check again': 'Comprobar de nuevo',
     'Checking…': 'Comprobando…',
 
+    // Windows and Linux: no helper yet
+    'Answers are not available on {0} yet': 'Las respuestas aún no están disponibles en {0}',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video responde a través de Claude Code con un pequeño programa auxiliar que, por ahora, solo funciona en macOS.',
+    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Aun así puedes copiar los subtítulos: pulsa .SRT arriba o haz clic derecho en la página de YouTube.',
+    'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Pégalos en Claude (claude.ai o la app de Claude) y haz tu pregunta allí.',
+    'Subtitles copied as text': 'Subtítulos copiados como texto',
+    'Subtitles copied as text ({0})': 'Subtítulos copiados como texto ({0})',
+
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copiar archivo de subtítulos',
     'Original language': 'Idioma original',
@@ -500,6 +540,14 @@ const I18N = {
     'Check again': '重新检查',
     'Checking…': '正在检查…',
 
+    // Windows and Linux: no helper yet
+    'Answers are not available on {0} yet': '{0} 上暂时还不能回答问题',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video 通过一个小助手程序调用 Claude Code 来回答问题，而这个助手目前只支持 macOS。',
+    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': '你仍然可以复制字幕：点击上方的 .SRT，或在 YouTube 页面上点右键。',
+    'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': '把字幕粘贴到 Claude（claude.ai 或 Claude 应用）里，在那里提问。',
+    'Subtitles copied as text': '字幕已作为文本复制',
+    'Subtitles copied as text ({0})': '字幕已作为文本复制（{0}）',
+
     // Context menu and on-page notifications
     'Copy subtitles file': '复制字幕文件',
     'Original language': '原语言',
@@ -587,6 +635,14 @@ const I18N = {
     'Copied': 'Copiado',
     'Check again': 'Verificar de novo',
     'Checking…': 'Verificando…',
+
+    // Windows and Linux: no helper yet
+    'Answers are not available on {0} yet': 'As respostas ainda não estão disponíveis no {0}',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'O ASK Video responde pelo Claude Code com um pequeno programa auxiliar, que por enquanto só funciona no macOS.',
+    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Você ainda pode copiar as legendas: clique em .SRT no topo ou clique com o botão direito na página do YouTube.',
+    'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Cole-as no Claude (claude.ai ou o app do Claude) e faça sua pergunta lá.',
+    'Subtitles copied as text': 'Legendas copiadas como texto',
+    'Subtitles copied as text ({0})': 'Legendas copiadas como texto ({0})',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copiar arquivo de legendas',
