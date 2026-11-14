@@ -138,13 +138,55 @@ const SETUP = {
   },
 };
 
-// The helper (and so the answers) works only on macOS for now, so other systems get
+// The same screens for Windows: PowerShell instead of Terminal, install.cmd instead of install.sh.
+const SETUP_WIN = {
+  'signed-out': {
+    title: 'Sign in to Claude Code',
+    lead: 'ASK Video answers through Claude Code on this computer, but it is not signed in.',
+    steps: [
+      ['Open PowerShell (Start menu → type "PowerShell").'],
+      ['Run this command:', 'claude auth login'],
+      ['Sign in with your Claude account in the browser that opens.'],
+      ['Come back here and press Check again.'],
+    ],
+  },
+  'no-claude': {
+    title: 'Install Claude Code',
+    lead: 'ASK Video answers through Claude Code, but it was not found on this computer.',
+    steps: [
+      ['Install it in PowerShell:', 'irm https://claude.ai/install.ps1 | iex'],
+      ['Sign in:', 'claude auth login'],
+      ['Run the helper installer again: double-click native\\install.cmd in the extension folder.'],
+      ['Come back here and press Check again.'],
+    ],
+  },
+  'no-helper': {
+    title: 'Install the ASK Video helper',
+    lead: 'The helper connects the extension to Claude Code and copies .srt files.',
+    steps: [
+      ['In the extension folder, open the native folder and double-click install.cmd.'],
+      ['Reload the extension at chrome://extensions.'],
+      ['Come back here and press Check again.'],
+    ],
+  },
+  error: {
+    title: 'Could not check Claude Code',
+    lead: 'Something went wrong while checking Claude Code.',
+    steps: [
+      ['Make sure it works in PowerShell:', 'claude auth status'],
+      ['Come back here and press Check again.'],
+    ],
+  },
+};
+
+// The helper (and so the answers) exists for macOS and Windows; other systems get
 // their own screen: what does not work yet, and what still does.
 const OS_NAMES = { win: 'Windows', linux: 'Linux', cros: 'ChromeOS', openbsd: 'OpenBSD', fuchsia: 'Fuchsia' };
 let OS = 'mac'; // from chrome.runtime.getPlatformInfo(): mac | win | linux | cros | …
+const hasHelper = () => OS === 'mac' || OS === 'win';
 const SETUP_NOT_MAC = {
   title: 'Answers are not available on {0} yet',
-  lead: 'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.',
+  lead: 'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.',
   steps: [
     ['You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.'],
     ['Paste them into Claude (claude.ai or the Claude app) and ask your question there.'],
@@ -152,8 +194,8 @@ const SETUP_NOT_MAC = {
 };
 
 function setupPanel() {
-  const mac = OS === 'mac';
-  const s = mac ? SETUP[claude.state] || SETUP.error : SETUP_NOT_MAC;
+  const screens = OS === 'win' ? SETUP_WIN : OS === 'mac' ? SETUP : null;
+  const s = screens ? screens[claude.state] || screens.error : SETUP_NOT_MAC;
   const box = el('div', 'setup');
   box.append(el('h3', null, t(s.title, OS_NAMES[OS] || OS)), el('p', null, t(s.lead)));
   const ol = el('ol');
@@ -168,7 +210,7 @@ function setupPanel() {
     ol.append(li);
   }
   box.append(ol);
-  if (!mac) return box;
+  if (!screens) return box;
   const again = el('button', 'recheck', t('Check again'));
   again.addEventListener('click', () => { again.disabled = true; again.textContent = t('Checking…'); checkClaude(); });
   box.append(again);
@@ -390,7 +432,7 @@ $('menu').addEventListener('click', async (e) => {
     const file = await chrome.runtime.sendMessage({ type: 'copyAsFile', filename: res.filename, content: res.srt });
     if (!file?.ok) {
       await navigator.clipboard.writeText(res.srt);
-      toast(OS === 'mac' ? 'Copied as text: the file-copy helper is not installed' : 'Subtitles copied as text');
+      toast(hasHelper() ? 'Copied as text: the file-copy helper is not installed' : 'Subtitles copied as text');
     }
     $('dlIcon').innerHTML = ICON_OK;
     setTimeout(() => { $('dlIcon').innerHTML = ICON_DL; }, 1500);

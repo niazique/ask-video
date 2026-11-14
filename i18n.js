@@ -62,11 +62,23 @@ const I18N = {
 
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'На {0} ответы пока недоступны',
-    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video отвечает через Claude Code с помощью небольшой программы-помощника, а она пока работает только на macOS.',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK Video отвечает через Claude Code с помощью небольшой программы-помощника, а она пока работает только на macOS и Windows.',
     'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Субтитры всё равно можно скопировать: нажмите .SRT вверху или кликните правой кнопкой на странице YouTube.',
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Вставьте их в Claude (claude.ai или приложение Claude) и задайте вопрос там.',
     'Subtitles copied as text': 'Субтитры скопированы текстом',
     'Subtitles copied as text ({0})': 'Субтитры скопированы текстом ({0})',
+
+    // Windows (PowerShell, install.cmd)
+    'Open PowerShell (Start menu → type "PowerShell").': 'Откройте PowerShell (меню «Пуск» → наберите «PowerShell»).',
+    'In the extension folder, open the native folder and double-click install.cmd.': 'В папке расширения откройте папку native и дважды кликните install.cmd.',
+    'Run the helper installer again: double-click native\\install.cmd in the extension folder.': 'Снова запустите установщик помощника: дважды кликните native\\install.cmd в папке расширения.',
+    'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder': 'Помощник ASK Video не установлен. Дважды кликните native\\install.cmd в папке расширения',
+    'Claude Code (claude) was not found. Install it, then run native\\install.cmd again': 'Claude Code (claude) не найден. Установите его и снова запустите native\\install.cmd',
+    'Claude Code is not signed in. Run `claude auth login` in PowerShell': 'Claude Code не авторизован. Выполните `claude auth login` в PowerShell',
+    'ASK Video answers through Claude Code on this computer, but it is not signed in.': 'ASK Video отвечает через Claude Code на этом компьютере, но вход в него не выполнен.',
+    'ASK Video answers through Claude Code, but it was not found on this computer.': 'ASK Video отвечает через Claude Code, но на этом компьютере он не найден.',
+    'Install it in PowerShell:': 'Установите его в PowerShell:',
+    'Make sure it works in PowerShell:': 'Проверьте, что он работает в PowerShell:',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Скопировать файл с субтитрами',
@@ -158,11 +170,23 @@ const I18N = {
 
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Antworten sind unter {0} noch nicht verfügbar',
-    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video antwortet über Claude Code mit einem kleinen Hilfsprogramm, das vorerst nur unter macOS läuft.',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK Video antwortet über Claude Code mit einem kleinen Hilfsprogramm, das vorerst nur unter macOS und Windows läuft.',
     'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Untertitel kannst du trotzdem kopieren: Klicke oben auf .SRT oder mach einen Rechtsklick auf der YouTube-Seite.',
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Füge sie in Claude ein (claude.ai oder die Claude-App) und stell deine Frage dort.',
     'Subtitles copied as text': 'Untertitel als Text kopiert',
     'Subtitles copied as text ({0})': 'Untertitel als Text kopiert ({0})',
+
+    // Windows (PowerShell, install.cmd)
+    'Open PowerShell (Start menu → type "PowerShell").': 'Öffne PowerShell (Startmenü → „PowerShell“ eintippen).',
+    'In the extension folder, open the native folder and double-click install.cmd.': 'Öffne im Erweiterungsordner den Ordner native und doppelklicke auf install.cmd.',
+    'Run the helper installer again: double-click native\\install.cmd in the extension folder.': 'Starte den Helfer-Installer erneut: Doppelklick auf native\\install.cmd im Erweiterungsordner.',
+    'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder': 'Der ASK Video-Helfer ist nicht installiert. Doppelklicke auf native\\install.cmd im Erweiterungsordner',
+    'Claude Code (claude) was not found. Install it, then run native\\install.cmd again': 'Claude Code (claude) wurde nicht gefunden. Installiere es und führe native\\install.cmd erneut aus',
+    'Claude Code is not signed in. Run `claude auth login` in PowerShell': 'Claude Code ist nicht angemeldet. Führe `claude auth login` in PowerShell aus',
+    'ASK Video answers through Claude Code on this computer, but it is not signed in.': 'ASK Video antwortet über Claude Code auf diesem Computer, aber du bist nicht angemeldet.',
+    'ASK Video answers through Claude Code, but it was not found on this computer.': 'ASK Video antwortet über Claude Code, aber es wurde auf diesem Computer nicht gefunden.',
+    'Install it in PowerShell:': 'Installiere es in PowerShell:',
+    'Make sure it works in PowerShell:': 'Prüfe, ob es in PowerShell funktioniert:',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Untertiteldatei kopieren',
@@ -254,11 +278,23 @@ const I18N = {
 
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Les réponses ne sont pas encore disponibles sous {0}',
-    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video répond via Claude Code grâce à un petit assistant qui ne fonctionne pour l’instant que sur macOS.',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK Video répond via Claude Code grâce à un petit assistant qui ne fonctionne pour l’instant que sur macOS et Windows.',
     'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Vous pouvez quand même copier les sous-titres : cliquez sur .SRT en haut ou faites un clic droit sur la page YouTube.',
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Collez-les dans Claude (claude.ai ou l’app Claude) et posez votre question là-bas.',
     'Subtitles copied as text': 'Sous-titres copiés en texte',
     'Subtitles copied as text ({0})': 'Sous-titres copiés en texte ({0})',
+
+    // Windows (PowerShell, install.cmd)
+    'Open PowerShell (Start menu → type "PowerShell").': 'Ouvrez PowerShell (menu Démarrer → tapez « PowerShell »).',
+    'In the extension folder, open the native folder and double-click install.cmd.': 'Dans le dossier de l’extension, ouvrez le dossier native et double-cliquez sur install.cmd.',
+    'Run the helper installer again: double-click native\\install.cmd in the extension folder.': 'Relancez l’installateur de l’assistant : double-cliquez sur native\\install.cmd dans le dossier de l’extension.',
+    'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder': 'L’assistant ASK Video n’est pas installé. Double-cliquez sur native\\install.cmd dans le dossier de l’extension',
+    'Claude Code (claude) was not found. Install it, then run native\\install.cmd again': 'Claude Code (claude) est introuvable. Installez-le, puis relancez native\\install.cmd',
+    'Claude Code is not signed in. Run `claude auth login` in PowerShell': 'Claude Code n’est pas connecté. Lancez `claude auth login` dans PowerShell',
+    'ASK Video answers through Claude Code on this computer, but it is not signed in.': 'ASK Video répond via Claude Code sur cet ordinateur, mais vous n’êtes pas connecté.',
+    'ASK Video answers through Claude Code, but it was not found on this computer.': 'ASK Video répond via Claude Code, mais il est introuvable sur cet ordinateur.',
+    'Install it in PowerShell:': 'Installez-le dans PowerShell :',
+    'Make sure it works in PowerShell:': 'Vérifiez qu’il fonctionne dans PowerShell :',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copier le fichier de sous-titres',
@@ -350,11 +386,23 @@ const I18N = {
 
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Le risposte non sono ancora disponibili su {0}',
-    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video risponde tramite Claude Code con un piccolo programma di supporto, che per ora funziona solo su macOS.',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK Video risponde tramite Claude Code con un piccolo programma di supporto, che per ora funziona solo su macOS e Windows.',
     'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Puoi comunque copiare i sottotitoli: clicca .SRT in alto o fai clic destro sulla pagina di YouTube.',
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Incollali in Claude (claude.ai o l’app Claude) e fai lì la tua domanda.',
     'Subtitles copied as text': 'Sottotitoli copiati come testo',
     'Subtitles copied as text ({0})': 'Sottotitoli copiati come testo ({0})',
+
+    // Windows (PowerShell, install.cmd)
+    'Open PowerShell (Start menu → type "PowerShell").': 'Apri PowerShell (menu Start → digita «PowerShell»).',
+    'In the extension folder, open the native folder and double-click install.cmd.': 'Nella cartella dell’estensione, apri la cartella native e fai doppio clic su install.cmd.',
+    'Run the helper installer again: double-click native\\install.cmd in the extension folder.': 'Esegui di nuovo l’installer dell’helper: doppio clic su native\\install.cmd nella cartella dell’estensione.',
+    'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder': 'L’helper di ASK Video non è installato. Fai doppio clic su native\\install.cmd nella cartella dell’estensione',
+    'Claude Code (claude) was not found. Install it, then run native\\install.cmd again': 'Claude Code (claude) non trovato. Installalo e poi esegui di nuovo native\\install.cmd',
+    'Claude Code is not signed in. Run `claude auth login` in PowerShell': 'Claude Code non ha effettuato l’accesso. Esegui `claude auth login` in PowerShell',
+    'ASK Video answers through Claude Code on this computer, but it is not signed in.': 'ASK Video risponde tramite Claude Code su questo computer, ma non hai effettuato l’accesso.',
+    'ASK Video answers through Claude Code, but it was not found on this computer.': 'ASK Video risponde tramite Claude Code, ma non è stato trovato su questo computer.',
+    'Install it in PowerShell:': 'Installalo in PowerShell:',
+    'Make sure it works in PowerShell:': 'Verifica che funzioni in PowerShell:',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copia il file dei sottotitoli',
@@ -446,11 +494,23 @@ const I18N = {
 
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Las respuestas aún no están disponibles en {0}',
-    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video responde a través de Claude Code con un pequeño programa auxiliar que, por ahora, solo funciona en macOS.',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK Video responde a través de Claude Code con un pequeño programa auxiliar que, por ahora, solo funciona en macOS y Windows.',
     'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Aun así puedes copiar los subtítulos: pulsa .SRT arriba o haz clic derecho en la página de YouTube.',
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Pégalos en Claude (claude.ai o la app de Claude) y haz tu pregunta allí.',
     'Subtitles copied as text': 'Subtítulos copiados como texto',
     'Subtitles copied as text ({0})': 'Subtítulos copiados como texto ({0})',
+
+    // Windows (PowerShell, install.cmd)
+    'Open PowerShell (Start menu → type "PowerShell").': 'Abre PowerShell (menú Inicio → escribe «PowerShell»).',
+    'In the extension folder, open the native folder and double-click install.cmd.': 'En la carpeta de la extensión, abre la carpeta native y haz doble clic en install.cmd.',
+    'Run the helper installer again: double-click native\\install.cmd in the extension folder.': 'Vuelve a ejecutar el instalador del asistente: haz doble clic en native\\install.cmd en la carpeta de la extensión.',
+    'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder': 'El asistente de ASK Video no está instalado. Haz doble clic en native\\install.cmd en la carpeta de la extensión',
+    'Claude Code (claude) was not found. Install it, then run native\\install.cmd again': 'No se encontró Claude Code (claude). Instálalo y vuelve a ejecutar native\\install.cmd',
+    'Claude Code is not signed in. Run `claude auth login` in PowerShell': 'Claude Code no ha iniciado sesión. Ejecuta `claude auth login` en PowerShell',
+    'ASK Video answers through Claude Code on this computer, but it is not signed in.': 'ASK Video responde a través de Claude Code en este ordenador, pero no has iniciado sesión.',
+    'ASK Video answers through Claude Code, but it was not found on this computer.': 'ASK Video responde a través de Claude Code, pero no se encontró en este ordenador.',
+    'Install it in PowerShell:': 'Instálalo en PowerShell:',
+    'Make sure it works in PowerShell:': 'Comprueba que funciona en PowerShell:',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copiar archivo de subtítulos',
@@ -542,11 +602,23 @@ const I18N = {
 
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': '{0} 上暂时还不能回答问题',
-    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'ASK Video 通过一个小助手程序调用 Claude Code 来回答问题，而这个助手目前只支持 macOS。',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK Video 通过一个小助手程序调用 Claude Code 来回答问题，而这个助手目前只支持 macOS 和 Windows。',
     'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': '你仍然可以复制字幕：点击上方的 .SRT，或在 YouTube 页面上点右键。',
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': '把字幕粘贴到 Claude（claude.ai 或 Claude 应用）里，在那里提问。',
     'Subtitles copied as text': '字幕已作为文本复制',
     'Subtitles copied as text ({0})': '字幕已作为文本复制（{0}）',
+
+    // Windows (PowerShell, install.cmd)
+    'Open PowerShell (Start menu → type "PowerShell").': '打开 PowerShell（开始菜单 → 输入“PowerShell”）。',
+    'In the extension folder, open the native folder and double-click install.cmd.': '在扩展文件夹中打开 native 文件夹，双击 install.cmd。',
+    'Run the helper installer again: double-click native\\install.cmd in the extension folder.': '重新运行助手安装程序：双击扩展文件夹中的 native\\install.cmd。',
+    'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder': '未安装 ASK Video 助手。请双击扩展文件夹中的 native\\install.cmd',
+    'Claude Code (claude) was not found. Install it, then run native\\install.cmd again': '找不到 Claude Code（claude）。请先安装，再重新运行 native\\install.cmd',
+    'Claude Code is not signed in. Run `claude auth login` in PowerShell': 'Claude Code 尚未登录。请在 PowerShell 中运行 `claude auth login`',
+    'ASK Video answers through Claude Code on this computer, but it is not signed in.': 'ASK Video 通过这台电脑上的 Claude Code 回答问题，但尚未登录。',
+    'ASK Video answers through Claude Code, but it was not found on this computer.': 'ASK Video 通过 Claude Code 回答问题，但在这台电脑上找不到它。',
+    'Install it in PowerShell:': '在 PowerShell 中安装：',
+    'Make sure it works in PowerShell:': '确认它在 PowerShell 中能正常运行：',
 
     // Context menu and on-page notifications
     'Copy subtitles file': '复制字幕文件',
@@ -638,11 +710,23 @@ const I18N = {
 
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'As respostas ainda não estão disponíveis no {0}',
-    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS for now.': 'O ASK Video responde pelo Claude Code com um pequeno programa auxiliar, que por enquanto só funciona no macOS.',
+    'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'O ASK Video responde pelo Claude Code com um pequeno programa auxiliar, que por enquanto só funciona no macOS e no Windows.',
     'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Você ainda pode copiar as legendas: clique em .SRT no topo ou clique com o botão direito na página do YouTube.',
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Cole-as no Claude (claude.ai ou o app do Claude) e faça sua pergunta lá.',
     'Subtitles copied as text': 'Legendas copiadas como texto',
     'Subtitles copied as text ({0})': 'Legendas copiadas como texto ({0})',
+
+    // Windows (PowerShell, install.cmd)
+    'Open PowerShell (Start menu → type "PowerShell").': 'Abra o PowerShell (menu Iniciar → digite “PowerShell”).',
+    'In the extension folder, open the native folder and double-click install.cmd.': 'Na pasta da extensão, abra a pasta native e clique duas vezes em install.cmd.',
+    'Run the helper installer again: double-click native\\install.cmd in the extension folder.': 'Execute de novo o instalador do assistente: clique duas vezes em native\\install.cmd na pasta da extensão.',
+    'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder': 'O assistente do ASK Video não está instalado. Clique duas vezes em native\\install.cmd na pasta da extensão',
+    'Claude Code (claude) was not found. Install it, then run native\\install.cmd again': 'O Claude Code (claude) não foi encontrado. Instale-o e execute native\\install.cmd de novo',
+    'Claude Code is not signed in. Run `claude auth login` in PowerShell': 'O Claude Code não está conectado. Execute `claude auth login` no PowerShell',
+    'ASK Video answers through Claude Code on this computer, but it is not signed in.': 'O ASK Video responde pelo Claude Code neste computador, mas você não está conectado.',
+    'ASK Video answers through Claude Code, but it was not found on this computer.': 'O ASK Video responde pelo Claude Code, mas ele não foi encontrado neste computador.',
+    'Install it in PowerShell:': 'Instale-o no PowerShell:',
+    'Make sure it works in PowerShell:': 'Verifique se funciona no PowerShell:',
 
     // Context menu and on-page notifications
     'Copy subtitles file': 'Copiar arquivo de legendas',

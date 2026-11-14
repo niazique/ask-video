@@ -50,9 +50,10 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (file.ok) return send(tab.id, { type: 'toast', text: t('File copied: {0}', res.filename) });
 
   const text = await send(tab.id, { type: 'copyText', text: res.srt });
-  const mac = (await chrome.runtime.getPlatformInfo().catch(() => ({ os: 'mac' }))).os === 'mac';
+  const { os } = await platform;
+  const withHelper = os === 'mac' || os === 'win'; // systems that have the file helper
   send(tab.id, text?.ok
-    ? { type: 'toast', text: mac ? t('Copied as text ({0}): the file helper is not installed', t(res.label)) : t('Subtitles copied as text ({0})', t(res.label)) }
+    ? { type: 'toast', text: withHelper ? t('Copied as text ({0}): the file helper is not installed', t(res.label)) : t('Subtitles copied as text ({0})', t(res.label)) }
     : { type: 'toast', text: t('Could not copy subtitles'), isError: true });
 });
 
@@ -87,6 +88,11 @@ async function getChat(videoId) {
 }
 const saveChat = (videoId, chat) => chrome.storage.session.set({ [chatKey(videoId)]: chat });
 
+const platform = chrome.runtime.getPlatformInfo().catch(() => ({ os: 'mac' }));
+const helperMissing = async () => ((await platform).os === 'win'
+  ? 'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder'
+  : 'The ASK Video helper is not installed. Run native/install.sh');
+
 // A native port (unlike sendNativeMessage) keeps the service worker alive while Claude thinks.
 function askHelper(system, prompt, model) {
   return new Promise((resolve) => {
@@ -99,10 +105,10 @@ function askHelper(system, prompt, model) {
       return finish({ ok: false, error: e.message });
     }
     port.onMessage.addListener((res) => { finish(res || { ok: false, error: 'No answer from the helper' }); port.disconnect(); });
-    port.onDisconnect.addListener(() => {
+    port.onDisconnect.addListener(async () => {
       const err = chrome.runtime.lastError?.message || '';
       finish({ ok: false, error: /not found|forbidden/i.test(err)
-        ? 'The ASK Video helper is not installed. Run native/install.sh'
+        ? await helperMissing()
         : err || 'The helper stopped without an answer' });
     });
     port.postMessage({ type: 'ask', system, prompt, model });
