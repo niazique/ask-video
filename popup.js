@@ -11,6 +11,8 @@ let chat = { messages: [], pending: false };
 let unavailable = '';
 let scene = null; // the TV scene <svg>, created once and kept between renders
 let idleScene = null; // the "not on YouTube" scene
+let laughScene = null; // the YouTube Shorts scene
+let shorts = false;
 let claude = null; // Claude Code status from the helper: { state: 'ready' | 'signed-out' | 'no-claude' | 'no-helper' | 'error' }
 
 $('dlIcon').innerHTML = ICON_DL;
@@ -238,7 +240,8 @@ function render() {
   if (unavailable) {
     // Not on a YouTube video (or the page is not ready): the puzzled critter.
     const e = el('div', 'first');
-    if (typeof createIdleScene === 'function') e.append(idleScene ||= createIdleScene());
+    if (shorts) { if (typeof createLaughScene === 'function') e.append(laughScene ||= createLaughScene()); }
+    else if (typeof createIdleScene === 'function') e.append(idleScene ||= createIdleScene());
     e.append(el('p', null, t(unavailable)));
     body.append(e);
   }
@@ -468,6 +471,11 @@ chrome.storage.onChanged.addListener((changes, area) => {
 async function init() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   // The url is only visible for youtube.com (host_permissions); for other sites it is empty.
+  if (tab?.url && /^https:\/\/(www|m)\.youtube\.com\/shorts\//.test(tab.url)) {
+    shorts = true;
+    unavailable = "Shorts? Ha! Claude doesn't do Shorts. Open a regular video.";
+    return render();
+  }
   if (!tab?.url || !/^https:\/\/www\.youtube\.com\/watch/.test(tab.url)) {
     unavailable = 'Open a YouTube video to ask Claude about it.';
     return render();

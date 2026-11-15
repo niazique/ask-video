@@ -313,3 +313,78 @@ function createIdleScene() {
   frame(0);
   return svg;
 }
+
+// The YouTube Shorts scene: the critter laughs at the idea of watching Shorts.
+// Eyes squeezed into ^ ^, arms up, shaking in bursts while red "HA" letters float away.
+// createLaughScene() returns an <svg> that animates while attached.
+function createLaughScene() {
+  const W = 120, H = 84, G = 74;
+  const CX = W / 2 - 6 * PX, CY = G - 8 * PX;
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('class', 'idle-scene');
+  svg.setAttribute('aria-hidden', 'true');
+  const mk = (tag, attrs = {}, parent = svg) => {
+    const e = document.createElementNS(SVG_NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+
+  mk('rect', { x: 30, y: G, width: 60, height: 2, rx: 1, fill: '#e8e8e8' });
+
+  const cg = mk('g');
+  const body = mk('path', { fill: ORANGE }, cg);
+  // A ^ made of half pixels, one per eye.
+  const HP = PX / 2;
+  const caret = (x0, y0) => `M${x0} ${y0 + HP}h${HP}v${HP}h-${HP}z M${x0 + HP} ${y0}h${HP}v${HP}h-${HP}z M${x0 + 2 * HP} ${y0 + HP}h${HP}v${HP}h-${HP}z`;
+  const eyesOpen = [mk('rect', { fill: INK, width: PX, height: PX }, cg), mk('rect', { fill: INK, width: PX, height: PX }, cg)];
+  const eyesShut = mk('path', { fill: INK, d: caret(2.5 * PX, PX) + caret(7.5 * PX, PX) }, cg);
+  [3, 8].forEach((col, i) => { eyesOpen[i].setAttribute('x', col * PX); eyesOpen[i].setAttribute('y', PX); });
+
+  // Floating "HA"s, reused from a small pool.
+  const pool = Array.from({ length: 6 }, () => {
+    const e = mk('text', { 'font-family': 'ui-monospace, Menlo, monospace', 'font-size': 9, 'font-weight': 700, 'text-anchor': 'middle', fill: RED, opacity: 0 });
+    e.textContent = 'HA';
+    return { e, born: -1e9, x: 0, side: 1 };
+  });
+  let next = 0, nextHa = 0;
+
+  const BURST = 1700, PAUSE = 900, CYCLE = BURST + PAUSE;
+  function frame(t) {
+    const phase = t % CYCLE, laughing = phase < BURST;
+    const shake = laughing ? Math.abs(Math.sin(t / 70)) * 3 : 0;
+    const tilt = laughing ? Math.sin(t / 140) * 6 : 0;
+    const squash = laughing && Math.sin(t / 70) > 0.6 ? 0.92 : 1;
+    const arms = laughing ? (Math.floor(t / 140) % 2 ? 'up' : 'mid') : 'mid';
+
+    body.setAttribute('d', bodyPath(arms, 'idle'));
+    eyesShut.setAttribute('opacity', laughing ? 1 : 0);
+    eyesOpen.forEach((e) => e.setAttribute('opacity', laughing ? 0 : 1));
+    const w = 12 * PX, h = 8 * PX;
+    cg.setAttribute('transform',
+      `translate(${CX} ${CY - shake}) rotate(${tilt} ${w / 2} ${h}) translate(0 ${h * (1 - squash)}) scale(1 ${squash})`);
+
+    if (laughing && t > nextHa) {
+      const p = pool[next++ % pool.length];
+      p.born = t;
+      p.side = next % 2 ? 1 : -1;
+      p.x = W / 2 + p.side * (14 + hash(next) * 10);
+      nextHa = t + 320;
+    }
+    for (const p of pool) {
+      const age = (t - p.born) / 1100;
+      if (age < 0 || age > 1) { p.e.setAttribute('opacity', 0); continue; }
+      const y = CY + 2 - age * 26;
+      const x = p.x + p.side * age * 8;
+      p.e.setAttribute('opacity', (1 - age).toFixed(2));
+      p.e.setAttribute('transform', `translate(${x} ${y}) rotate(${p.side * 12})`);
+    }
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function loop(now) { if (svg.isConnected) frame(reduce ? 200 : now); if (!reduce) requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  frame(200);
+  return svg;
+}
