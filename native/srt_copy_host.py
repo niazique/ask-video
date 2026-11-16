@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""ASK Video native helper.
+"""ASK native helper.
 
 Messages from the extension:
   {"filename", "content"}                -> save the .srt to a temp folder and put it

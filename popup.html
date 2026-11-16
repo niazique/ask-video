@@ -65,6 +65,11 @@
   .a code { font: 12px ui-monospace, Menlo, monospace; background: #f1f1f1; padding: 0 4px; border-radius: 4px; }
   .ts { font: 11px ui-monospace, Menlo, monospace; padding: 1px 5px; border: 0; border-radius: 6px; background: #f1f1f1; white-space: nowrap; cursor: pointer; }
   .ts:hover { background: #000; color: #fff; }
+  /* A quoted fragment of the page: click to scroll the page there */
+  .ql { display: inline; padding: 0 2px; margin: 0 -2px; border: 0; border-radius: 4px; background: none; font: inherit; font-style: italic; text-align: left; text-decoration: underline dotted #999; text-underline-offset: 3px; cursor: pointer; }
+  .ql::before { content: "\201C"; }
+  .ql::after { content: "\201D"; }
+  .ql:hover { background: #ffe066; text-decoration-color: transparent; }
   .err { padding: 8px 11px; border: 1px solid #000; border-radius: var(--r); font-size: 12px; }
   .thinking { color: #999; }
   .thinking::after { content: ""; animation: dots 1.2s steps(4) infinite; }
@@ -73,6 +78,7 @@
   .foot { padding: 8px 12px 12px; }
   .first { margin: auto; text-align: center; }
   .first .tv-scene { display: block; width: 240px; max-width: 100%; height: auto; margin: 0 auto; overflow: visible; cursor: pointer; }
+  .first .read-scene { display: block; width: 210px; max-width: 100%; height: auto; margin: 0 auto; overflow: visible; }
   .first .idle-scene { display: block; width: 150px; height: auto; margin: 0 auto; overflow: visible; }
   .first p { margin: 4px auto 0; max-width: 280px; color: #999; }
   .chip { display: block; margin: 12px auto 0; padding: 6px 12px; border: 1px solid #d6d6d6; border-radius: 10px; background: #fff; color: #000; font-size: 12px; cursor: pointer; }
@@ -96,7 +102,7 @@
 <body>
   <div class="hd">
     <img class="logo" src="icons/icon128.png" alt="">
-    <span class="name">ASK Video</span>
+    <span class="name">ASK</span>
     <span class="spacer"></span>
     <div class="dl-wrap">
       <button id="lang" class="text-btn" data-i18n-title="Language"></button>
@@ -104,7 +110,7 @@
         <div id="langItems"></div>
       </div>
     </div>
-    <div class="dl-wrap">
+    <div class="dl-wrap" hidden>
       <button id="dl" data-i18n-title="Copy the subtitles as an .srt file" disabled><span id="dlIcon"></span><span>.SRT</span></button>
       <div class="menu" id="menu" hidden>
         <div class="mh" data-i18n="Copy .srt file"></div>

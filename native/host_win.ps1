@@ -1,4 +1,4 @@
-# ASK Video native helper for Windows (Windows PowerShell 5.1 or PowerShell 7).
+# ASK native helper for Windows (Windows PowerShell 5.1 or PowerShell 7).
 # Chrome starts it through host.bat; messages are length-prefixed UTF-8 JSON on stdin/stdout.
 #   {filename, content}                    -> save the .srt to %TEMP% and put it on the clipboard as a file
 #   {type: 'ask', system, prompt, model?}  -> answer with the local Claude Code CLI (claude -p)

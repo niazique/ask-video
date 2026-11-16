@@ -12,7 +12,11 @@ let unavailable = '';
 let scene = null; // the TV scene <svg>, created once and kept between renders
 let idleScene = null; // the "not on YouTube" scene
 let laughScene = null; // the YouTube Shorts scene
+let readScene = null; // the first screen for web pages
 let shorts = false;
+let mode = null; // 'video' (a YouTube video, from its subtitles) or 'page' (any page, from its text)
+let chatId = null; // the video id, or "page:" + the page address
+let page = null; // { title, url, text, cut } read from the page
 let claude = null; // Claude Code status from the helper: { state: 'ready' | 'signed-out' | 'no-claude' | 'no-helper' | 'error' }
 
 $('dlIcon').innerHTML = ICON_DL;
@@ -35,18 +39,26 @@ function el(tag, cls, text) {
   return e;
 }
 
-// ---------- Minimal, safe markdown: paragraphs, lists, **bold**, `code`, [mm:ss] ----------
+// ---------- Minimal, safe markdown: paragraphs, lists, **bold**, `code`, [mm:ss], [[quote]] ----------
 
 const toSeconds = (stamp) => stamp.replace(/[[\]]/g, '').split(':').reduce((acc, n) => acc * 60 + Number(n), 0);
 
 function inline(parent, text) {
-  const re = /(\*\*[^*]+\*\*|`[^`]+`|\[(?:\d{1,2}:)?\d{1,2}:\d{2}\])/g;
+  // Videos get [mm:ss] timestamps, pages get [[quoted fragments]]; both are links.
+  const re = mode === 'page'
+    ? /(\*\*[^*]+\*\*|`[^`]+`|\[\[[^\]\n]{2,300}\]\])/g
+    : /(\*\*[^*]+\*\*|`[^`]+`|\[(?:\d{1,2}:)?\d{1,2}:\d{2}\])/g;
   let last = 0, m;
   while ((m = re.exec(text))) {
     if (m.index > last) parent.append(text.slice(last, m.index));
     const tok = m[0];
     if (tok.startsWith('**')) parent.append(el('strong', null, tok.slice(2, -2)));
     else if (tok.startsWith('`')) parent.append(el('code', null, tok.slice(1, -1)));
+    else if (tok.startsWith('[[')) {
+      const b = el('button', 'ql', tok.slice(2, -2).trim());
+      b.title = t('Show this place on the page');
+      parent.append(b);
+    }
     else {
       const b = el('button', 'ts', tok.slice(1, -1));
       b.title = t('Jump to this moment');
@@ -103,7 +115,7 @@ function emptyState(text) {
 const SETUP = {
   'signed-out': {
     title: 'Sign in to Claude Code',
-    lead: 'ASK Video answers through Claude Code on this Mac, but it is not signed in.',
+    lead: 'ASK answers through Claude Code on this Mac, but it is not signed in.',
     steps: [
       ['Open the Terminal app.'],
       ['Run this command:', 'claude auth login'],
@@ -113,7 +125,7 @@ const SETUP = {
   },
   'no-claude': {
     title: 'Install Claude Code',
-    lead: 'ASK Video answers through Claude Code, but it was not found on this Mac.',
+    lead: 'ASK answers through Claude Code, but it was not found on this Mac.',
     steps: [
       ['Install it in Terminal:', 'npm install -g @anthropic-ai/claude-code'],
       ['Sign in:', 'claude auth login'],
@@ -122,7 +134,7 @@ const SETUP = {
     ],
   },
   'no-helper': {
-    title: 'Install the ASK Video helper',
+    title: 'Install the ASK helper',
     lead: 'The helper connects the extension to Claude Code and copies .srt files.',
     steps: [
       ['In Terminal, open the extension folder and run:', './native/install.sh'],
@@ -144,7 +156,7 @@ const SETUP = {
 const SETUP_WIN = {
   'signed-out': {
     title: 'Sign in to Claude Code',
-    lead: 'ASK Video answers through Claude Code on this computer, but it is not signed in.',
+    lead: 'ASK answers through Claude Code on this computer, but it is not signed in.',
     steps: [
       ['Open PowerShell (Start menu → type "PowerShell").'],
       ['Run this command:', 'claude auth login'],
@@ -154,7 +166,7 @@ const SETUP_WIN = {
   },
   'no-claude': {
     title: 'Install Claude Code',
-    lead: 'ASK Video answers through Claude Code, but it was not found on this computer.',
+    lead: 'ASK answers through Claude Code, but it was not found on this computer.',
     steps: [
       ['Install it in PowerShell:', 'irm https://claude.ai/install.ps1 | iex'],
       ['Sign in:', 'claude auth login'],
@@ -163,7 +175,7 @@ const SETUP_WIN = {
     ],
   },
   'no-helper': {
-    title: 'Install the ASK Video helper',
+    title: 'Install the ASK helper',
     lead: 'The helper connects the extension to Claude Code and copies .srt files.',
     steps: [
       ['In the extension folder, open the native folder and double-click install.cmd.'],
@@ -188,7 +200,7 @@ let OS = 'mac'; // from chrome.runtime.getPlatformInfo(): mac | win | linux | cr
 const hasHelper = () => OS === 'mac' || OS === 'win';
 const SETUP_NOT_MAC = {
   title: 'Answers are not available on {0} yet',
-  lead: 'ASK Video answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.',
+  lead: 'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.',
   steps: [
     ['You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.'],
     ['Paste them into Claude (claude.ai or the Claude app) and ask your question there.'],
@@ -247,12 +259,17 @@ function render() {
   }
   else if (notReady) body.append(setupPanel());
   else if (!chat.messages.length && !chat.pending) {
-    // First screen: the TV scene, intro text and the summary suggestion, gone after the first question.
+    // First screen: the scene, intro text and the summary suggestion, gone after the first question.
     const e = el('div', 'first');
-    if (typeof createTvScene === 'function') e.append(scene ||= createTvScene());
-    e.append(el('p', null, t('Claude has already watched this video and is ready to answer any question about it!')));
+    if (mode === 'page') {
+      if (typeof createReadScene === 'function') e.append(readScene ||= createReadScene());
+      e.append(el('p', null, t('Claude has already read this page and is ready to answer any question about it!')));
+    } else {
+      if (typeof createTvScene === 'function') e.append(scene ||= createTvScene());
+      e.append(el('p', null, t('Claude has already watched this video and is ready to answer any question about it!')));
+    }
     const chip = el('button', 'chip', t('Summarize it'));
-    chip.dataset.q = 'Summarize this video.';
+    chip.dataset.q = mode === 'page' ? 'Summarize this page.' : 'Summarize this video.';
     e.append(chip);
     body.append(e);
   }
@@ -283,13 +300,13 @@ function autosize() {
 
 function ask(question) {
   question = question.trim();
-  if (!question || chat.pending || unavailable || !info) return;
+  if (!question || chat.pending || unavailable || !chatId) return;
   $('input').value = '';
   autosize();
   // Show it right away; the background script owns the real state and will update it.
   chat = { messages: [...chat.messages, { role: 'user', text: question }], pending: true };
   render();
-  chrome.runtime.sendMessage({ type: 'ask', tabId, videoId: info.videoId, question });
+  chrome.runtime.sendMessage({ type: 'ask', tabId, id: chatId, kind: mode, question, page });
 }
 
 $('input').addEventListener('input', autosize);
@@ -312,6 +329,102 @@ $('body').addEventListener('click', async (e) => {
   const res = await chrome.tabs.sendMessage(tabId, { type: 'seek', seconds: Number(b.dataset.seconds) }).catch(() => null);
   if (!res?.ok) toast(res?.error || 'Could not jump to this moment');
 });
+
+// Quoted fragments in answers about a page scroll the page there and highlight it.
+$('body').addEventListener('click', async (e) => {
+  const b = e.target.closest('.ql');
+  if (!b || tabId == null) return;
+  const [res] = await chrome.scripting.executeScript({ target: { tabId }, func: showQuote, args: [b.textContent] }).catch(() => [null]);
+  if (!res?.result) toast('Could not find this place on the page');
+});
+
+// ---------- Reading the page (these two run inside the page) ----------
+
+function readPage() {
+  // The main text: the biggest article / main block, or the whole page.
+  let root = document.body, best = 0;
+  for (const c of document.querySelectorAll('article, main, [role="main"]')) {
+    const n = c.innerText.length;
+    if (n > best) { best = n; root = c; }
+  }
+  if (best < 600) root = document.body;
+  let text = (root?.innerText || '').replace(/[ \t\u00a0]+/g, ' ').replace(/ *\n[ \n]*\n */g, '\n\n').trim();
+  const MAX = 300000; // about 75k tokens
+  const cut = text.length > MAX;
+  if (cut) text = text.slice(0, MAX);
+  return { title: document.title, url: location.href.split('#')[0], text, cut };
+}
+
+function showQuote(quote) {
+  // Search the visible text, ignoring case, quote marks and runs of whitespace.
+  const SKIP = /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|TEMPLATE)$/;
+  const QUOTES = /[\u2018\u2019\u201a\u201c\u201d\u201e\u00ab\u00bb"'`]/;
+  const fold = (c) => c.toLowerCase()[0];
+  const chars = [], map = [];
+  let space = true;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode: (n) => (n.parentElement && !SKIP.test(n.parentElement.tagName) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT),
+  });
+  for (let n; (n = walker.nextNode());) {
+    const v = n.nodeValue;
+    for (let i = 0; i < v.length; i++) {
+      const c = v[i];
+      if (QUOTES.test(c)) continue;
+      if (/\s/.test(c)) { if (space) continue; space = true; chars.push(' '); }
+      else { space = false; chars.push(fold(c)); }
+      map.push([n, i]);
+    }
+  }
+  const hay = chars.join('');
+  const norm = (s) => [...s].filter((c) => !QUOTES.test(c)).map((c) => (/\s/.test(c) ? ' ' : fold(c))).join('').replace(/ +/g, ' ').trim();
+  const visible = (r) => { const b = r.getBoundingClientRect(); return b.width > 0 && b.height > 0; };
+  const rangeAt = (at, len) => {
+    const r = document.createRange();
+    r.setStart(map[at][0], map[at][1]);
+    const [en, eo] = map[at + len - 1];
+    r.setEnd(en, eo + 1);
+    return r;
+  };
+  // An ellipsis inside the fragment: search for its longest piece.
+  const part = quote.split(/…|\.\.\./).sort((a, b) => b.length - a.length)[0];
+  // Try the whole fragment first, then shorter starts of it.
+  const words = norm(part).split(' ');
+  let found = null;
+  for (const k of [words.length, 6, 4, 3]) {
+    if (k > words.length || found) continue;
+    const needle = words.slice(0, k).join(' ');
+    if (needle.length < 8 && k < words.length) continue;
+    let firstHit = null;
+    for (let at = hay.indexOf(needle); at >= 0; at = hay.indexOf(needle, at + 1)) {
+      const r = rangeAt(at, needle.length);
+      if (visible(r)) { found = r; break; }
+      firstHit ||= r;
+    }
+    found ||= firstHit;
+  }
+  if (!found) return false;
+
+  // Bring it into view inside any scrolling box, then centre the fragment itself in the window.
+  (found.startContainer.parentElement || document.body).scrollIntoView({ block: 'nearest' });
+  const box = found.getBoundingClientRect();
+  window.scrollBy({ top: box.top + box.height / 2 - innerHeight / 2, behavior: 'smooth' });
+  if (window.CSS?.highlights && window.Highlight) {
+    if (!document.getElementById('ask-quote-style')) {
+      const st = document.createElement('style');
+      st.id = 'ask-quote-style';
+      st.textContent = '::highlight(ask-quote) { background: #ffe066; color: inherit; }';
+      document.documentElement.appendChild(st);
+    }
+    CSS.highlights.set('ask-quote', new Highlight(found));
+    clearTimeout(window.__askQuoteTimer);
+    window.__askQuoteTimer = setTimeout(() => CSS.highlights.delete('ask-quote'), 6000);
+  } else {
+    const sel = getSelection();
+    sel.removeAllRanges();
+    sel.addRange(found);
+  }
+  return true;
+}
 
 // ---------- Copy .srt ----------
 
@@ -458,8 +571,8 @@ function fillTrackNames() {
 }
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area !== 'session' || !info) return;
-  const c = changes[`chat:${info.videoId}`];
+  if (area !== 'session' || !chatId) return;
+  const c = changes[`chat:${chatId}`];
   if (!c) return;
   chat = c.newValue || { messages: [], pending: false };
   render();
@@ -470,30 +583,53 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 async function init() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  // The url is only visible for youtube.com (host_permissions); for other sites it is empty.
-  if (tab?.url && /^https:\/\/(www|m)\.youtube\.com\/shorts\//.test(tab.url)) {
+  const url = tab?.url || '';
+  if (/^https:\/\/(www|m)\.youtube\.com\/shorts\//.test(url)) {
     shorts = true;
     unavailable = "Shorts? Ha! Claude doesn't do Shorts. Open a regular video.";
     return render();
   }
-  if (!tab?.url || !/^https:\/\/www\.youtube\.com\/watch/.test(tab.url)) {
-    unavailable = 'Open a YouTube video to ask Claude about it.';
-    return render();
-  }
-  tabId = tab.id;
-  const res = await chrome.tabs.sendMessage(tabId, { type: 'list' }).catch(() => null);
-  if (!res) { unavailable = 'Reload the video tab (it was opened before the extension was installed).'; return render(); }
-  if (!res.ok) { unavailable = res.error; return render(); }
-  info = res;
+  if (/^https:\/\/www\.youtube\.com\/watch/.test(url)) return initVideo(tab);
+  if (/^https?:/.test(url)) return initPage(tab);
+  unavailable = 'Open a web page or a YouTube video to ask Claude about it.';
+  render();
+}
 
-  $('dl').disabled = false;
-  fillTrackNames();
-
-  const key = `chat:${info.videoId}`;
+async function openChat() {
+  const key = `chat:${chatId}`;
   chat = (await chrome.storage.session.get(key))[key] || { messages: [], pending: false };
   render();
   $('input').focus();
   checkClaude();
+}
+
+async function initVideo(tab) {
+  mode = 'video';
+  tabId = tab.id;
+  $('dl').closest('.dl-wrap').hidden = false;
+  const res = await chrome.tabs.sendMessage(tabId, { type: 'list' }).catch(() => null);
+  if (!res) { unavailable = 'Reload the video tab (it was opened before the extension was installed).'; return render(); }
+  if (!res.ok) { unavailable = res.error; return render(); }
+  info = res;
+  chatId = info.videoId;
+  $('dl').disabled = false;
+  fillTrackNames();
+  return openChat();
+}
+
+async function initPage(tab) {
+  mode = 'page';
+  tabId = tab.id;
+  const input = $('input');
+  input.dataset.i18nPlaceholder = 'Ask anything about this page…';
+  input.placeholder = t(input.dataset.i18nPlaceholder);
+  // activeTab: clicking the toolbar icon lets the popup read this tab.
+  const [res] = await chrome.scripting.executeScript({ target: { tabId }, func: readPage }).catch(() => [null]);
+  page = res?.result;
+  if (!page) { unavailable = 'Chrome does not let extensions read this page.'; return render(); }
+  if (page.text.length < 200) { unavailable = 'There is not enough text on this page to ask about.'; return render(); }
+  chatId = 'page:' + page.url;
+  return openChat();
 }
 
 loadLang().then(async () => {

@@ -37,7 +37,7 @@ fi
 cat > "$MANIFEST" <<EOF
 {
   "name": "com.srtcopy.host",
-  "description": "ASK Video: copies .srt files and asks Claude Code",
+  "description": "ASK: copies .srt files and asks Claude Code",
   "path": "$APP_DIR/srt_copy_host.py",
   "type": "stdio",
   "allowed_origins": ["chrome-extension://$EXT_ID/"]

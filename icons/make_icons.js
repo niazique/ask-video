@@ -1,4 +1,4 @@
-// Renders the ASK Video icon (full-size black rounded square, white "ASK") to PNG with macOS AppKit.
+// Renders the ASK icon (full-size black rounded square, white "ASK") to PNG with macOS AppKit.
 // Run: osascript -l JavaScript icons/make_icons.js <output folder>
 ObjC.import('AppKit');
 

@@ -388,3 +388,95 @@ function createLaughScene() {
   frame(200);
   return svg;
 }
+
+// The web-page scene: the critter reads a long article line by line. The line being read
+// turns red, the sheet scrolls up as it goes, and now and then it finds something and hops.
+// Hover the sheet to make it read faster. createReadScene() returns an animating <svg>.
+function createReadScene() {
+  const W = 150, H = 96, G = 88;
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('class', 'read-scene');
+  svg.setAttribute('aria-hidden', 'true');
+  const mk = (tag, attrs = {}, parent = svg) => {
+    const e = document.createElementNS(SVG_NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+
+  mk('rect', { x: 16, y: G, width: 118, height: 2, rx: 1, fill: '#e8e8e8' });
+
+  // The sheet with the article.
+  const SX = 76, SY = 8, SW = 52, SH = G - SY;
+  const clipId = 'ask-read-clip-' + Math.random().toString(36).slice(2);
+  const defs = mk('defs');
+  const clip = mk('clipPath', { id: clipId }, defs);
+  mk('rect', { x: SX + 1, y: SY + 3, width: SW - 2, height: SH - 6 }, clip);
+  mk('rect', { x: SX, y: SY, width: SW, height: SH, rx: 3, fill: '#fff', stroke: '#d6d6d6', 'stroke-width': 1 });
+  const text = mk('g', { 'clip-path': `url(#${clipId})` });
+  const LH = 6, ROWS = Math.ceil(SH / LH) + 2, LX = SX + 6, LW = SW - 12;
+  const rows = Array.from({ length: ROWS }, () => mk('rect', { x: LX, height: 2.4, rx: 1.2, fill: '#d9d9d9' }, text));
+  const bar = mk('rect', { x: LX, height: 2.4, rx: 1.2, fill: RED }, text);
+  // Line i of the endless article: blank between paragraphs, short at a paragraph's end.
+  const gap = (i) => i % 7 === 6 || (i % 7 === 3 && hash(i) < 0.3);
+  const width = (i) => (gap(i) ? 0 : gap(i + 1) ? LW * (0.35 + hash(i) * 0.35) : LW * (0.82 + hash(i) * 0.18));
+
+  // The reader, standing to the left of the sheet.
+  const CX = 30, CY = G - 8 * PX;
+  const cg = mk('g');
+  const body = mk('path', { fill: ORANGE }, cg);
+  const eyes = [mk('rect', { fill: INK, width: PX }, cg), mk('rect', { fill: INK, width: PX }, cg)];
+
+  const s = { read: 0, scroll: 0, last: null, fast: false, hopAt: -1e9 };
+  svg.addEventListener('mouseenter', () => { s.fast = true; });
+  svg.addEventListener('mouseleave', () => { s.fast = false; });
+
+  function frame(t) {
+    const dt = s.last == null ? 0 : Math.min(100, t - s.last);
+    s.last = t;
+    // Reading speed in lines per millisecond; blank lines are skipped quickly.
+    let line = Math.floor(s.read);
+    s.read += dt * (gap(line) ? 1 / 120 : s.fast ? 1 / 160 : 1 / 700);
+    line = Math.floor(s.read);
+    const p = s.read - line;
+    // Keep the line being read in the upper middle of the sheet.
+    const target = Math.max(0, line - 5) * LH;
+    s.scroll = lerp(s.scroll, target, s.fast ? 0.2 : 0.06);
+    const first = Math.floor(s.scroll / LH);
+    const y0 = SY + 6 - s.scroll;
+    rows.forEach((r, j) => {
+      const i = first + j;
+      r.setAttribute('y', y0 + i * LH);
+      r.setAttribute('width', width(i));
+      r.setAttribute('fill', i < line ? '#bdbdbd' : '#d9d9d9');
+    });
+    bar.setAttribute('y', y0 + line * LH);
+    bar.setAttribute('width', width(line) * p);
+
+    // Found something: every 9th paragraph or so it hops with its arms up.
+    if (p < 0.02 && line % 23 === 11 && t - s.hopAt > 2000) s.hopAt = t;
+    const h = (t - s.hopAt) / 700;
+    const hop = h >= 0 && h < 1 ? Math.sin(h * Math.PI * 2) ** 2 * 6 : 0;
+
+    // Eyes follow the line across and down the sheet.
+    const rel = (y0 + line * LH - SY) / SH;
+    const ex = p < 0.5 ? 0 : 1;
+    const ey = rel < 0.3 ? -1 : rel > 0.6 ? 1 : 0;
+    const blink = (t % 3700) < 110;
+    body.setAttribute('d', bodyPath(hop > 0.5 ? 'up' : 'mid', hop > 1 ? (Math.floor(t / 110) % 2 ? 'a' : 'b') : 'idle'));
+    [3, 8].forEach((col, i) => {
+      const hh = blink ? PX * 0.25 : PX;
+      eyes[i].setAttribute('x', (col + ex) * PX);
+      eyes[i].setAttribute('y', (1 + ey) * PX + (PX - hh));
+      eyes[i].setAttribute('height', hh);
+    });
+    cg.setAttribute('transform', `translate(${CX} ${CY - hop})`);
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function loop(now) { if (svg.isConnected) frame(reduce ? 0 : now); else s.last = null; if (!reduce) requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  frame(0);
+  return svg;
+}

@@ -58,40 +58,52 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 });
 
 // ---------- Ask Claude ----------
-// The chat for each video lives in chrome.storage.session, so the answer is kept even
+// The chat for each video or page lives in chrome.storage.session, so the answer is kept even
 // if the popup is closed while Claude is thinking. The popup just renders that state.
 
-const SYSTEM = [
-  'You answer questions about a YouTube video using its subtitles, which the user provides.',
-  'Answer in the language the user writes in.',
-  'When you refer to a moment in the video, cite its timestamp in square brackets exactly like [12:34] or [1:02:03].',
-  'If the subtitles do not contain the answer, say so briefly; you may add general knowledge but mark it as such.',
-].join(' ');
+const SYSTEM = {
+  video: [
+    'You answer questions about a YouTube video using its subtitles, which the user provides.',
+    'Answer in the language the user writes in.',
+    'When you refer to a moment in the video, cite its timestamp in square brackets exactly like [12:34] or [1:02:03].',
+    'If the subtitles do not contain the answer, say so briefly; you may add general knowledge but mark it as such.',
+  ].join(' '),
+  page: [
+    'You answer questions about a web page using its text, which the user provides.',
+    'Answer in the language the user writes in.',
+    'When you refer to a specific place on the page, link to it with a short fragment of the page text in double square brackets, like [[exact words from the page]]:',
+    '3 to 8 consecutive words copied character for character from the page text, in the language of the page even if you answer in another language.',
+    'The reader clicks the link to scroll the page to that place, so never paraphrase inside the brackets and never put anything else in double square brackets.',
+    'If the page text does not contain the answer, say so briefly; you may add general knowledge but mark it as such.',
+  ].join(' '),
+};
+const CITE = { video: 'timestamps', page: 'links to the places on the page' };
 
 // Answer length, chosen with the segments under the input: tl;dr · normal · lecture.
 // Each level also sets the format, so a lecture gets headings while tl;dr stays one line.
 const LENGTH = [
-  'Length: exactly one sentence — the single most important point. No lists, no headings, no preamble.',
-  'Length: a few short paragraphs (or a short paragraph and a few bullets) covering the main points, with timestamps where useful. No headings.',
-  'Length: a full lecture — a thorough, well-structured answer with section headings (markdown "## Heading"), several paragraphs per section, bullet lists where they help, and timestamps throughout.',
+  () => 'Length: exactly one sentence — the single most important point. No lists, no headings, no preamble.',
+  (cite) => `Length: a few short paragraphs (or a short paragraph and a few bullets) covering the main points, with ${cite} where useful. No headings.`,
+  (cite) => `Length: a full lecture — a thorough, well-structured answer with section headings (markdown "## Heading"), several paragraphs per section, bullet lists where they help, and ${cite} throughout.`,
 ];
 
-const chatKey = (videoId) => `chat:${videoId}`;
-const trKey = (videoId) => `tr:${videoId}`;
+// Chats are keyed by source: a video id, or "page:" + the page address.
+const chatKey = (id) => `chat:${id}`;
+const trKey = (id) => `tr:${id}`;
 
-async function getChat(videoId) {
-  const key = chatKey(videoId);
+async function getChat(id) {
+  const key = chatKey(id);
   const chat = (await chrome.storage.session.get(key))[key] || { messages: [], pending: false };
   // A request lost to a service-worker restart must not block the chat forever.
   if (chat.pending && Date.now() - (chat.since || 0) > 5 * 60 * 1000) chat.pending = false;
   return chat;
 }
-const saveChat = (videoId, chat) => chrome.storage.session.set({ [chatKey(videoId)]: chat });
+const saveChat = (id, chat) => chrome.storage.session.set({ [chatKey(id)]: chat });
 
 const platform = chrome.runtime.getPlatformInfo().catch(() => ({ os: 'mac' }));
 const helperMissing = async () => ((await platform).os === 'win'
-  ? 'The ASK Video helper is not installed. Double-click native\\install.cmd in the extension folder'
-  : 'The ASK Video helper is not installed. Run native/install.sh');
+  ? 'The ASK helper is not installed. Double-click native\\install.cmd in the extension folder'
+  : 'The ASK helper is not installed. Run native/install.sh');
 
 // A native port (unlike sendNativeMessage) keeps the service worker alive while Claude thinks.
 function askHelper(system, prompt, model) {
@@ -128,45 +140,71 @@ async function getTranscript(tabId, videoId) {
   return tr;
 }
 
-function buildPrompt(tr, history, question) {
+// The popup reads the page text and sends it with each question; the last copy is kept
+// so the chat still works if the popup was closed and the question is retried.
+async function getPageText(id, page) {
+  const key = trKey(id);
+  if (page?.text) {
+    await chrome.storage.session.set({ [key]: page }).catch(() => {});
+    return page;
+  }
+  const cached = (await chrome.storage.session.get(key))[key];
+  if (cached) return cached;
+  throw new Error('Reopen the popup to read the page again');
+}
+
+function buildPrompt(kind, src, history, question) {
   const past = history
     .filter((m) => m.role === 'user' || m.role === 'assistant')
     .map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.text}`)
     .join('\n\n');
+  const source = kind === 'page'
+    ? [
+        `Page title: ${src.title}`,
+        `Address: ${src.url}`,
+        src.cut ? 'The page is very long; this is its beginning.' : '',
+        'Page text:',
+        '<page>', src.text, '</page>',
+      ]
+    : [
+        `Video title: ${src.title}`,
+        `Subtitles (language: ${src.lang}):`,
+        '<subtitles>', src.transcript, '</subtitles>',
+      ];
   return [
-    `Video title: ${tr.title}`,
-    `Subtitles (language: ${tr.lang}):`,
-    '<subtitles>', tr.transcript, '</subtitles>',
+    ...source.filter(Boolean),
     past ? `\nConversation so far:\n${past}` : '',
     `\nUser: ${question}`,
   ].join('\n');
 }
 
-async function ask(tabId, videoId, question) {
-  const chat = await getChat(videoId);
+async function ask({ tabId, id, kind, question, page }) {
+  kind = kind === 'page' ? 'page' : 'video';
+  const chat = await getChat(id);
   if (chat.pending) return;
   const history = chat.messages.slice();
   chat.messages.push({ role: 'user', text: question });
   chat.pending = true;
   chat.since = Date.now();
-  await saveChat(videoId, chat);
+  await saveChat(id, chat);
 
   let reply;
   try {
-    const tr = await getTranscript(tabId, videoId);
+    const src = kind === 'page' ? await getPageText(id, page) : await getTranscript(tabId, id);
     // Both chosen in the popup: model (empty = Claude Code default) and answer length.
     const { model, verbosity } = await chrome.storage.local.get(['model', 'verbosity']);
-    const length = LENGTH[Number.isInteger(verbosity) ? Math.max(0, Math.min(LENGTH.length - 1, verbosity)) : 1];
-    const res = await askHelper(`${SYSTEM} ${length}`, buildPrompt(tr, history, question), model);
+    const level = Number.isInteger(verbosity) ? Math.max(0, Math.min(LENGTH.length - 1, verbosity)) : 1;
+    const system = `${SYSTEM[kind]} ${LENGTH[level](CITE[kind])}`;
+    const res = await askHelper(system, buildPrompt(kind, src, history, question), model);
     reply = res.ok ? { role: 'assistant', text: res.answer } : { role: 'error', text: res.error };
   } catch (e) {
     reply = { role: 'error', text: e.message };
   }
-  const done = await getChat(videoId);
+  const done = await getChat(id);
   if (!done.messages.length) return; // the chat was cleared meanwhile
   done.messages.push(reply);
   done.pending = false;
-  await saveChat(videoId, done);
+  await saveChat(id, done);
 }
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
@@ -175,7 +213,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     return true;
   }
   if (msg.type === 'ask') {
-    ask(msg.tabId, msg.videoId, msg.question);
+    ask(msg);
     sendResponse({ ok: true });
     return false;
   }
@@ -189,7 +227,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     return true;
   }
   if (msg.type === 'clearChat') {
-    saveChat(msg.videoId, { messages: [], pending: false }).then(() => sendResponse({ ok: true }));
+    saveChat(msg.id, { messages: [], pending: false }).then(() => sendResponse({ ok: true }));
     return true;
   }
   return false;

@@ -1,4 +1,4 @@
-# Installs the ASK Video helper on Windows: it copies .srt files to the clipboard and
+# Installs the ASK helper on Windows: it copies .srt files to the clipboard and
 # answers questions through the local Claude Code CLI. Run install.cmd (double-click).
 # Creates, for the current user only:
 #   %LOCALAPPDATA%\ASKVideo\host.ps1, host.bat, config.json, com.srtcopy.host.json
@@ -50,7 +50,7 @@ if ($claude) {
 $manifestPath = Join-Path $AppDir 'com.srtcopy.host.json'
 $manifest = [ordered]@{
   name = 'com.srtcopy.host'
-  description = 'ASK Video: copies .srt files and asks Claude Code'
+  description = 'ASK: copies .srt files and asks Claude Code'
   path = (Join-Path $AppDir 'host.bat')
   type = 'stdio'
   allowed_origins = @("chrome-extension://$ExtId/")
