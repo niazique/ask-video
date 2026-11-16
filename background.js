@@ -1,26 +1,4 @@
-importScripts('i18n.js');
-
 const HOST = 'com.srtcopy.host';
-const WATCH = ['https://www.youtube.com/watch*'];
-const MENU = [
-  { id: 'srt-root', title: 'Copy subtitles file' },
-  { id: 'srt-native', parentId: 'srt-root', title: 'Original language' },
-  { id: 'srt-en', parentId: 'srt-root', title: 'English' },
-];
-
-chrome.runtime.onInstalled.addListener(async () => {
-  await loadLang();
-  chrome.contextMenus.removeAll(() => {
-    for (const m of MENU) chrome.contextMenus.create({ ...m, title: t(m.title), contexts: ['all'], documentUrlPatterns: WATCH });
-  });
-});
-
-// The popup's language switch also renames the context menu.
-chrome.storage.onChanged.addListener(async (changes, area) => {
-  if (area !== 'local' || !changes.lang) return;
-  await loadLang();
-  for (const m of MENU) chrome.contextMenus.update(m.id, { title: t(m.title) }, () => void chrome.runtime.lastError);
-});
 
 // Puts the .srt on the clipboard as a file via the native helper (see native/install.sh).
 function copyAsFile(filename, content) {
@@ -37,25 +15,6 @@ function copyAsFile(filename, content) {
 }
 
 const send = (tabId, msg) => chrome.tabs.sendMessage(tabId, msg).catch(() => null);
-
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (!tab?.id || (info.menuItemId !== 'srt-native' && info.menuItemId !== 'srt-en')) return;
-  await loadLang();
-  const spec = { kind: info.menuItemId === 'srt-en' ? 'en' : 'native' };
-  const res = await send(tab.id, { type: 'get', spec });
-  if (!res) return; // no content script: the tab was opened before the extension was installed
-  if (!res.ok) return send(tab.id, { type: 'toast', text: t(res.error), isError: true });
-
-  const file = await copyAsFile(res.filename, res.srt);
-  if (file.ok) return send(tab.id, { type: 'toast', text: t('File copied: {0}', res.filename) });
-
-  const text = await send(tab.id, { type: 'copyText', text: res.srt });
-  const { os } = await platform;
-  const withHelper = os === 'mac' || os === 'win'; // systems that have the file helper
-  send(tab.id, text?.ok
-    ? { type: 'toast', text: withHelper ? t('Copied as text ({0}): the file helper is not installed', t(res.label)) : t('Subtitles copied as text ({0})', t(res.label)) }
-    : { type: 'toast', text: t('Could not copy subtitles'), isError: true });
-});
 
 // ---------- Ask Claude ----------
 // The chat for each video or page lives in chrome.storage.session, so the answer is kept even

@@ -202,7 +202,7 @@ const SETUP_NOT_MAC = {
   title: 'Answers are not available on {0} yet',
   lead: 'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.',
   steps: [
-    ['You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.'],
+    ['You can still copy the subtitles of a YouTube video: click .SRT at the top.'],
     ['Paste them into Claude (claude.ai or the Claude app) and ask your question there.'],
   ],
 };

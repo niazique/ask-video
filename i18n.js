@@ -11,7 +11,6 @@ const I18N = {
     'Copy .srt file': 'Скопировать файл .srt',
     'Original': 'Оригинал',
     'English': 'Английский',
-    'Also in the right-click menu on YouTube': 'Также есть в меню правого клика на YouTube',
     'Summarize it': 'Перескажи вкратце',
     'Summarize this video.': 'Кратко перескажи это видео.',
     'Ask anything about this video…': 'Спросите что угодно об этом видео…',
@@ -73,10 +72,9 @@ const I18N = {
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'На {0} ответы пока недоступны',
     'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK отвечает через Claude Code с помощью небольшой программы-помощника, а она пока работает только на macOS и Windows.',
-    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Субтитры всё равно можно скопировать: нажмите .SRT вверху или кликните правой кнопкой на странице YouTube.',
+    "You can still copy the subtitles of a YouTube video: click .SRT at the top.": "Субтитры YouTube-видео по-прежнему можно скопировать: нажмите .SRT вверху.",
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Вставьте их в Claude (claude.ai или приложение Claude) и задайте вопрос там.',
     'Subtitles copied as text': 'Субтитры скопированы текстом',
-    'Subtitles copied as text ({0})': 'Субтитры скопированы текстом ({0})',
 
     // Windows (PowerShell, install.cmd)
     'Open PowerShell (Start menu → type "PowerShell").': 'Откройте PowerShell (меню «Пуск» → наберите «PowerShell»).',
@@ -91,11 +89,6 @@ const I18N = {
     'Make sure it works in PowerShell:': 'Проверьте, что он работает в PowerShell:',
 
     // Context menu and on-page notifications
-    'Copy subtitles file': 'Скопировать файл с субтитрами',
-    'Original language': 'Язык оригинала',
-    'File copied: {0}': 'Файл скопирован: {0}',
-    'Copied as text ({0}): the file helper is not installed': 'Скопировано как текст ({0}): помощник для файлов не установлен',
-    'Could not copy subtitles': 'Не удалось скопировать субтитры',
 
     // Background and helper errors
     'The ASK helper is not installed. Run native/install.sh': 'Помощник ASK не установлен. Запустите native/install.sh',
@@ -120,7 +113,6 @@ const I18N = {
     'Subtitle track not found': 'Дорожка субтитров не найдена',
     'YouTube did not return subtitles. Reload the page and try again': 'YouTube не отдал субтитры. Обновите страницу и попробуйте ещё раз',
     'The subtitles are empty': 'Субтитры пустые',
-    'English (auto-translated)': 'English (автоперевод)',
   },
   de: {
     // Popup
@@ -129,7 +121,6 @@ const I18N = {
     'Copy .srt file': '.srt-Datei kopieren',
     'Original': 'Original',
     'English': 'Englisch',
-    'Also in the right-click menu on YouTube': 'Auch im Rechtsklick-Menü auf YouTube',
     'Summarize it': 'Kurz zusammenfassen',
     'Summarize this video.': 'Fasse dieses Video kurz zusammen.',
     'Ask anything about this video…': 'Frag alles zu diesem Video…',
@@ -191,10 +182,9 @@ const I18N = {
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Antworten sind unter {0} noch nicht verfügbar',
     'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK antwortet über Claude Code mit einem kleinen Hilfsprogramm, das vorerst nur unter macOS und Windows läuft.',
-    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Untertitel kannst du trotzdem kopieren: Klicke oben auf .SRT oder mach einen Rechtsklick auf der YouTube-Seite.',
+    "You can still copy the subtitles of a YouTube video: click .SRT at the top.": "Die Untertitel eines YouTube-Videos kannst du trotzdem kopieren: Klicke oben auf .SRT.",
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Füge sie in Claude ein (claude.ai oder die Claude-App) und stell deine Frage dort.',
     'Subtitles copied as text': 'Untertitel als Text kopiert',
-    'Subtitles copied as text ({0})': 'Untertitel als Text kopiert ({0})',
 
     // Windows (PowerShell, install.cmd)
     'Open PowerShell (Start menu → type "PowerShell").': 'Öffne PowerShell (Startmenü → „PowerShell“ eintippen).',
@@ -209,11 +199,6 @@ const I18N = {
     'Make sure it works in PowerShell:': 'Prüfe, ob es in PowerShell funktioniert:',
 
     // Context menu and on-page notifications
-    'Copy subtitles file': 'Untertiteldatei kopieren',
-    'Original language': 'Originalsprache',
-    'File copied: {0}': 'Datei kopiert: {0}',
-    'Copied as text ({0}): the file helper is not installed': 'Als Text kopiert ({0}): Der Datei-Helfer ist nicht installiert',
-    'Could not copy subtitles': 'Untertitel konnten nicht kopiert werden',
 
     // Background and helper errors
     'The ASK helper is not installed. Run native/install.sh': 'Der ASK-Helfer ist nicht installiert. Führe native/install.sh aus',
@@ -238,7 +223,6 @@ const I18N = {
     'Subtitle track not found': 'Untertitelspur nicht gefunden',
     'YouTube did not return subtitles. Reload the page and try again': 'YouTube hat keine Untertitel geliefert. Lade die Seite neu und versuch es erneut',
     'The subtitles are empty': 'Die Untertitel sind leer',
-    'English (auto-translated)': 'English (automatisch übersetzt)',
   },
   fr: {
     // Popup
@@ -247,7 +231,6 @@ const I18N = {
     'Copy .srt file': 'Copier le fichier .srt',
     'Original': 'Original',
     'English': 'Anglais',
-    'Also in the right-click menu on YouTube': 'Aussi dans le menu clic droit sur YouTube',
     'Summarize it': 'Résume-la',
     'Summarize this video.': 'Résume cette vidéo.',
     'Ask anything about this video…': 'Posez une question sur cette vidéo…',
@@ -309,10 +292,9 @@ const I18N = {
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Les réponses ne sont pas encore disponibles sous {0}',
     'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK répond via Claude Code grâce à un petit assistant qui ne fonctionne pour l’instant que sur macOS et Windows.',
-    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Vous pouvez quand même copier les sous-titres : cliquez sur .SRT en haut ou faites un clic droit sur la page YouTube.',
+    "You can still copy the subtitles of a YouTube video: click .SRT at the top.": "Vous pouvez toujours copier les sous-titres d’une vidéo YouTube : cliquez sur .SRT en haut.",
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Collez-les dans Claude (claude.ai ou l’app Claude) et posez votre question là-bas.',
     'Subtitles copied as text': 'Sous-titres copiés en texte',
-    'Subtitles copied as text ({0})': 'Sous-titres copiés en texte ({0})',
 
     // Windows (PowerShell, install.cmd)
     'Open PowerShell (Start menu → type "PowerShell").': 'Ouvrez PowerShell (menu Démarrer → tapez « PowerShell »).',
@@ -327,11 +309,6 @@ const I18N = {
     'Make sure it works in PowerShell:': 'Vérifiez qu’il fonctionne dans PowerShell :',
 
     // Context menu and on-page notifications
-    'Copy subtitles file': 'Copier le fichier de sous-titres',
-    'Original language': 'Langue d’origine',
-    'File copied: {0}': 'Fichier copié : {0}',
-    'Copied as text ({0}): the file helper is not installed': 'Copié en texte ({0}) : l’assistant de fichiers n’est pas installé',
-    'Could not copy subtitles': 'Impossible de copier les sous-titres',
 
     // Background and helper errors
     'The ASK helper is not installed. Run native/install.sh': 'L’assistant ASK n’est pas installé. Lancez native/install.sh',
@@ -356,7 +333,6 @@ const I18N = {
     'Subtitle track not found': 'Piste de sous-titres introuvable',
     'YouTube did not return subtitles. Reload the page and try again': 'YouTube n’a pas renvoyé de sous-titres. Rechargez la page et réessayez',
     'The subtitles are empty': 'Les sous-titres sont vides',
-    'English (auto-translated)': 'English (traduction auto)',
   },
   it: {
     // Popup
@@ -365,7 +341,6 @@ const I18N = {
     'Copy .srt file': 'Copia file .srt',
     'Original': 'Originale',
     'English': 'Inglese',
-    'Also in the right-click menu on YouTube': 'Anche nel menu del tasto destro su YouTube',
     'Summarize it': 'Riassumilo',
     'Summarize this video.': 'Riassumi questo video.',
     'Ask anything about this video…': 'Chiedi qualsiasi cosa su questo video…',
@@ -427,10 +402,9 @@ const I18N = {
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Le risposte non sono ancora disponibili su {0}',
     'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK risponde tramite Claude Code con un piccolo programma di supporto, che per ora funziona solo su macOS e Windows.',
-    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Puoi comunque copiare i sottotitoli: clicca .SRT in alto o fai clic destro sulla pagina di YouTube.',
+    "You can still copy the subtitles of a YouTube video: click .SRT at the top.": "Puoi comunque copiare i sottotitoli di un video YouTube: fai clic su .SRT in alto.",
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Incollali in Claude (claude.ai o l’app Claude) e fai lì la tua domanda.',
     'Subtitles copied as text': 'Sottotitoli copiati come testo',
-    'Subtitles copied as text ({0})': 'Sottotitoli copiati come testo ({0})',
 
     // Windows (PowerShell, install.cmd)
     'Open PowerShell (Start menu → type "PowerShell").': 'Apri PowerShell (menu Start → digita «PowerShell»).',
@@ -445,11 +419,6 @@ const I18N = {
     'Make sure it works in PowerShell:': 'Verifica che funzioni in PowerShell:',
 
     // Context menu and on-page notifications
-    'Copy subtitles file': 'Copia il file dei sottotitoli',
-    'Original language': 'Lingua originale',
-    'File copied: {0}': 'File copiato: {0}',
-    'Copied as text ({0}): the file helper is not installed': 'Copiato come testo ({0}): l’helper per i file non è installato',
-    'Could not copy subtitles': 'Impossibile copiare i sottotitoli',
 
     // Background and helper errors
     'The ASK helper is not installed. Run native/install.sh': 'L’helper di ASK non è installato. Esegui native/install.sh',
@@ -474,7 +443,6 @@ const I18N = {
     'Subtitle track not found': 'Traccia dei sottotitoli non trovata',
     'YouTube did not return subtitles. Reload the page and try again': 'YouTube non ha restituito i sottotitoli. Ricarica la pagina e riprova',
     'The subtitles are empty': 'I sottotitoli sono vuoti',
-    'English (auto-translated)': 'English (traduzione automatica)',
   },
   es: {
     // Popup
@@ -483,7 +451,6 @@ const I18N = {
     'Copy .srt file': 'Copiar archivo .srt',
     'Original': 'Original',
     'English': 'Inglés',
-    'Also in the right-click menu on YouTube': 'También en el menú del clic derecho en YouTube',
     'Summarize it': 'Resúmelo',
     'Summarize this video.': 'Resume este vídeo.',
     'Ask anything about this video…': 'Pregunta lo que quieras sobre este vídeo…',
@@ -545,10 +512,9 @@ const I18N = {
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'Las respuestas aún no están disponibles en {0}',
     'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK responde a través de Claude Code con un pequeño programa auxiliar que, por ahora, solo funciona en macOS y Windows.',
-    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Aun así puedes copiar los subtítulos: pulsa .SRT arriba o haz clic derecho en la página de YouTube.',
+    "You can still copy the subtitles of a YouTube video: click .SRT at the top.": "Aún puedes copiar los subtítulos de un vídeo de YouTube: haz clic en .SRT arriba.",
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Pégalos en Claude (claude.ai o la app de Claude) y haz tu pregunta allí.',
     'Subtitles copied as text': 'Subtítulos copiados como texto',
-    'Subtitles copied as text ({0})': 'Subtítulos copiados como texto ({0})',
 
     // Windows (PowerShell, install.cmd)
     'Open PowerShell (Start menu → type "PowerShell").': 'Abre PowerShell (menú Inicio → escribe «PowerShell»).',
@@ -563,11 +529,6 @@ const I18N = {
     'Make sure it works in PowerShell:': 'Comprueba que funciona en PowerShell:',
 
     // Context menu and on-page notifications
-    'Copy subtitles file': 'Copiar archivo de subtítulos',
-    'Original language': 'Idioma original',
-    'File copied: {0}': 'Archivo copiado: {0}',
-    'Copied as text ({0}): the file helper is not installed': 'Copiado como texto ({0}): el asistente de archivos no está instalado',
-    'Could not copy subtitles': 'No se pudieron copiar los subtítulos',
 
     // Background and helper errors
     'The ASK helper is not installed. Run native/install.sh': 'El asistente de ASK no está instalado. Ejecuta native/install.sh',
@@ -592,7 +553,6 @@ const I18N = {
     'Subtitle track not found': 'No se encontró la pista de subtítulos',
     'YouTube did not return subtitles. Reload the page and try again': 'YouTube no devolvió los subtítulos. Recarga la página e inténtalo de nuevo',
     'The subtitles are empty': 'Los subtítulos están vacíos',
-    'English (auto-translated)': 'English (traducción automática)',
   },
   zh: {
     // Popup
@@ -601,7 +561,6 @@ const I18N = {
     'Copy .srt file': '复制 .srt 文件',
     'Original': '原语言',
     'English': '英语',
-    'Also in the right-click menu on YouTube': '也可在 YouTube 页面的右键菜单中使用',
     'Summarize it': '总结一下',
     'Summarize this video.': '请总结这个视频。',
     'Ask anything about this video…': '关于这个视频，问什么都行…',
@@ -663,10 +622,9 @@ const I18N = {
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': '{0} 上暂时还不能回答问题',
     'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'ASK 通过一个小助手程序调用 Claude Code 来回答问题，而这个助手目前只支持 macOS 和 Windows。',
-    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': '你仍然可以复制字幕：点击上方的 .SRT，或在 YouTube 页面上点右键。',
+    "You can still copy the subtitles of a YouTube video: click .SRT at the top.": "你仍然可以复制 YouTube 视频的字幕：点击顶部的 .SRT。",
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': '把字幕粘贴到 Claude（claude.ai 或 Claude 应用）里，在那里提问。',
     'Subtitles copied as text': '字幕已作为文本复制',
-    'Subtitles copied as text ({0})': '字幕已作为文本复制（{0}）',
 
     // Windows (PowerShell, install.cmd)
     'Open PowerShell (Start menu → type "PowerShell").': '打开 PowerShell（开始菜单 → 输入“PowerShell”）。',
@@ -681,11 +639,6 @@ const I18N = {
     'Make sure it works in PowerShell:': '确认它在 PowerShell 中能正常运行：',
 
     // Context menu and on-page notifications
-    'Copy subtitles file': '复制字幕文件',
-    'Original language': '原语言',
-    'File copied: {0}': '文件已复制：{0}',
-    'Copied as text ({0}): the file helper is not installed': '已作为文本复制（{0}）：未安装文件助手',
-    'Could not copy subtitles': '无法复制字幕',
 
     // Background and helper errors
     'The ASK helper is not installed. Run native/install.sh': '未安装 ASK 助手。请运行 native/install.sh',
@@ -710,7 +663,6 @@ const I18N = {
     'Subtitle track not found': '找不到字幕轨道',
     'YouTube did not return subtitles. Reload the page and try again': 'YouTube 没有返回字幕。请刷新页面后重试',
     'The subtitles are empty': '字幕为空',
-    'English (auto-translated)': 'English（自动翻译）',
   },
   pt: {
     // Popup
@@ -719,7 +671,6 @@ const I18N = {
     'Copy .srt file': 'Copiar arquivo .srt',
     'Original': 'Original',
     'English': 'Inglês',
-    'Also in the right-click menu on YouTube': 'Também no menu do botão direito no YouTube',
     'Summarize it': 'Resuma',
     'Summarize this video.': 'Resuma este vídeo.',
     'Ask anything about this video…': 'Pergunte qualquer coisa sobre este vídeo…',
@@ -781,10 +732,9 @@ const I18N = {
     // Windows and Linux: no helper yet
     'Answers are not available on {0} yet': 'As respostas ainda não estão disponíveis no {0}',
     'ASK answers through Claude Code using a small helper app, and the helper works only on macOS and Windows for now.': 'O ASK responde pelo Claude Code com um pequeno programa auxiliar, que por enquanto só funciona no macOS e no Windows.',
-    'You can still copy the subtitles: click .SRT at the top, or right-click on a YouTube page.': 'Você ainda pode copiar as legendas: clique em .SRT no topo ou clique com o botão direito na página do YouTube.',
+    "You can still copy the subtitles of a YouTube video: click .SRT at the top.": "Você ainda pode copiar as legendas de um vídeo do YouTube: clique em .SRT no topo.",
     'Paste them into Claude (claude.ai or the Claude app) and ask your question there.': 'Cole-as no Claude (claude.ai ou o app do Claude) e faça sua pergunta lá.',
     'Subtitles copied as text': 'Legendas copiadas como texto',
-    'Subtitles copied as text ({0})': 'Legendas copiadas como texto ({0})',
 
     // Windows (PowerShell, install.cmd)
     'Open PowerShell (Start menu → type "PowerShell").': 'Abra o PowerShell (menu Iniciar → digite “PowerShell”).',
@@ -799,11 +749,6 @@ const I18N = {
     'Make sure it works in PowerShell:': 'Verifique se funciona no PowerShell:',
 
     // Context menu and on-page notifications
-    'Copy subtitles file': 'Copiar arquivo de legendas',
-    'Original language': 'Idioma original',
-    'File copied: {0}': 'Arquivo copiado: {0}',
-    'Copied as text ({0}): the file helper is not installed': 'Copiado como texto ({0}): o assistente de arquivos não está instalado',
-    'Could not copy subtitles': 'Não foi possível copiar as legendas',
 
     // Background and helper errors
     'The ASK helper is not installed. Run native/install.sh': 'O assistente do ASK não está instalado. Execute native/install.sh',
@@ -828,7 +773,6 @@ const I18N = {
     'Subtitle track not found': 'Faixa de legendas não encontrada',
     'YouTube did not return subtitles. Reload the page and try again': 'O YouTube não retornou as legendas. Recarregue a página e tente de novo',
     'The subtitles are empty': 'As legendas estão vazias',
-    'English (auto-translated)': 'English (tradução automática)',
   },
 };
 
